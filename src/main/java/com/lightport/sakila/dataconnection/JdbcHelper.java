@@ -6,25 +6,29 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 public class JdbcHelper {
 	private static Connection conn;
 	private static Statement st;
 	private ResultSet rs;
-
-	public static void openConnect() {
-		try {
+	private static Log log;
+	
+	public static void openConnect() throws ClassNotFoundException, SQLException {
+		
+			log = LogFactory.getLog(Class.class);
 			Class.forName("com.mysql.jdbc.Driver");
 			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/sakila","root","root");
 			st = conn.createStatement();
-			System.out.println("connection succes");
-			} catch (Exception e) {			
-		}
+			log.info("connection succes");
+			
 	}
 	public ResultSet getResultSet(String query){
 		try {
 			rs = st.executeQuery(query);
 		} catch (SQLException e) {
-			System.out.println(e.getMessage());
+			log.error(e.getMessage(),e);
 		}
 		return rs;
 	}

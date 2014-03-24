@@ -13,12 +13,9 @@ Ext.onReady(function(){
 		           {name : 'actor_id',type : 'int'},
 		           'first_name','last_name',{name:'last_update',type:'date', dateformat:'c'}]	
 	});
-	  
-	store.load({
-		callback: function() {
-			console.log(store.getCount());
-		}
-	});	
+	
+	var pageSize = 20;
+	
 	var grid = new Ext.grid.GridPanel({
 	    store:store,
 	    colModel: new Ext.grid.ColumnModel({
@@ -36,12 +33,31 @@ Ext.onReady(function(){
 	            }
 	        ]
 	    }),
+	    bbar: new Ext.PagingToolbar({
+	        store: store,  
+	        displayInfo: true,
+	        pageSize: pageSize,
+	        prependButtons: true,
+	        items: [
+	            'text 1'
+	        ]
+	    }),
 	    sm: new Ext.grid.RowSelectionModel({singleSelect:true}),
 	    width: 350,
 	    height: 300,
 	    frame: false,
 	    title: 'Actors form sakila'
 	});
+	
+	store.load({
+	    params: {
+	        start: 0,          
+	        limit: pageSize
+	    },
+		callback: function() {
+			console.log(store.getCount());
+		}
+	});	
 	
 	grid.render('array_grid');
 	window.store = store;
