@@ -15,7 +15,7 @@ public class JdbcHelper {
 	private ResultSet rs;
 	private static Log log;
 	
-	public static void openConnect() throws ClassNotFoundException, SQLException {
+	public static void openConnect() throws Exception {
 		
 			log = LogFactory.getLog(Class.class);
 			Class.forName("com.mysql.jdbc.Driver");

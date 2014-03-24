@@ -2,7 +2,6 @@ package com.lightport.sakila.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -24,6 +23,8 @@ import com.lightport.sakila.dataconnection.JsonHelper;
 public class ActorServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Log log = LogFactory.getLog(Class.class);
+	private static int pageLimit;
+	private static int pageStart;
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
@@ -38,16 +39,20 @@ public class ActorServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		PrintWriter writer = response.getWriter();		
+		PrintWriter writer = response.getWriter();
+		
+		//int pageLimit = Integer.parseInt(request.getParameter("limit"));
+		log.info("limit"+pageLimit);
+		
 		try {
 			
 			JdbcHelper.openConnect();
 			JsonHelper jsonHelper = new JsonHelper();
 			JSONObject jsonObject = jsonHelper
-					.getJsonObject("select *from actor");
+					.getJsonObject("SELECT * FROM actor;");
 			// JSONObject jsonObject2 = jsonHelper.getJsonObject("select * from actor where actor_id = 42");	
 			writer.printf("%s", jsonObject);
-		} catch (ClassNotFoundException | SQLException e) {			
+		} catch (Exception e) {			
 			log.error(e.getMessage(),e);
 		}
 		writer.flush();

@@ -17,6 +17,7 @@ public class JsonHelper {
 		ResultSet resultSet = jdbcHelper.getResultSet(query);
 		ResultSetMetaData metaData = resultSet.getMetaData();
 		int columnCount = metaData.getColumnCount();
+		
 
 		HashMap<String, Object> map;
 		ArrayList<HashMap<String, Object>> list = new ArrayList<>();
@@ -29,10 +30,17 @@ public class JsonHelper {
 				map.put(key, value);
 			}
 			list.add(map);
-		}
+		}		
+		jsonObject .put("total",22);
 		jsonObject.put("actors", list);
 
 		return jsonObject;
+	}
+	
+	public ResultSet getResultSet(String query){
+		JdbcHelper jdbcHelper = new JdbcHelper();
+		ResultSet resultSet = jdbcHelper.getResultSet(query);		
+		return resultSet;
 	}
 
 }
