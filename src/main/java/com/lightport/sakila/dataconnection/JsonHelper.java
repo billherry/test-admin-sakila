@@ -25,7 +25,7 @@ public class JsonHelper {
 			
 			while(resultSet.next()){
 				 map = new HashMap<>();
-				 for (int i = 1; i < columnCount; i++) {
+				 for (int i = 1; i <= columnCount; i++) {
 					String key = metaData.getColumnName(i);
 					Object value = resultSet.getObject(i);
 					map.put(key, value);
