@@ -23,8 +23,8 @@ import com.lightport.sakila.dataconnection.JsonHelper;
 public class ActorServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Log log = LogFactory.getLog(Class.class);
-	private static int pageLimit;
-	private static int pageStart;
+	private  int pageLimit;
+	private  int pageStart;
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
@@ -41,16 +41,18 @@ public class ActorServlet extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		PrintWriter writer = response.getWriter();
 		
-		//int pageLimit = Integer.parseInt(request.getParameter("limit"));
+		pageLimit = Integer.parseInt(request.getParameter("limit"));
+		pageStart = Integer.parseInt(request.getParameter("start"));
 		log.info("limit"+pageLimit);
+		log.info("start"+pageStart);
 		
 		try {
 			
 			JdbcHelper.openConnect();
 			JsonHelper jsonHelper = new JsonHelper();
 			JSONObject jsonObject = jsonHelper
-					.getJsonObject("SELECT * FROM actor;");
-			// JSONObject jsonObject2 = jsonHelper.getJsonObject("select * from actor where actor_id = 42");	
+					.getJsonObject("SELECT * FROM actor LIMIT "+pageStart+","+pageLimit+")");
+			//JSONObject jsonObject2 = jsonHelper.getJsonObject("select * from actor where actor_id = 42");	
 			writer.printf("%s", jsonObject);
 		} catch (Exception e) {			
 			log.error(e.getMessage(),e);

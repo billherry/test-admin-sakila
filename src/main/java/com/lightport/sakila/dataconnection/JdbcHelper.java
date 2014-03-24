@@ -10,9 +10,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 public class JdbcHelper {
-	private static Connection conn;
+	public static Connection conn;
 	private static Statement st;
-	private ResultSet rs;
+	private static ResultSet rs;
 	private static Log log;
 	
 	public static void openConnect() throws Exception {
@@ -24,12 +24,16 @@ public class JdbcHelper {
 			log.info("connection succes");
 			
 	}
-	public ResultSet getResultSet(String query){
-		try {
+	public static ResultSet getResultSet(String query){
+		try {			
 			rs = st.executeQuery(query);
 		} catch (SQLException e) {
 			log.error(e.getMessage(),e);
 		}
 		return rs;
+	}
+	
+	public static boolean isConnected(){
+		return conn !=null;
 	}
 }

@@ -10,14 +10,12 @@ import org.json.JSONObject;
 
 public class JsonHelper {
 
-	public JSONObject getJsonObject(String query) throws SQLException {
+	public JSONObject getJsonObject(String query) throws Exception {
 		JSONObject jsonObject = new JSONObject();
-
-		JdbcHelper jdbcHelper = new JdbcHelper();
-		ResultSet resultSet = jdbcHelper.getResultSet(query);
-		ResultSetMetaData metaData = resultSet.getMetaData();
-		int columnCount = metaData.getColumnCount();
 		
+		ResultSet resultSet = JdbcHelper.getResultSet(query);
+		ResultSetMetaData metaData = resultSet.getMetaData();
+		int columnCount = metaData.getColumnCount();		
 
 		HashMap<String, Object> map;
 		ArrayList<HashMap<String, Object>> list = new ArrayList<>();
@@ -30,16 +28,26 @@ public class JsonHelper {
 				map.put(key, value);
 			}
 			list.add(map);
-		}		
-		jsonObject .put("total",22);
+		}
+		
+		ResultSet totalResultSet = getResultSet("SELECT COUNT(*) FROM actor;");
+		totalResultSet.last();
+		int total = totalResultSet.getInt(1);
+		
+		jsonObject .put("total", total);
 		jsonObject.put("actors", list);
 
 		return jsonObject;
 	}
 	
-	public ResultSet getResultSet(String query){
-		JdbcHelper jdbcHelper = new JdbcHelper();
-		ResultSet resultSet = jdbcHelper.getResultSet(query);		
+	public ResultSet getResultSet(String query) throws Exception{
+		ResultSet resultSet = null;
+		if(JdbcHelper.isConnected()) {
+			resultSet = JdbcHelper.getResultSet(query);
+		}else{
+			JdbcHelper.openConnect();
+			resultSet = JdbcHelper.getResultSet(query);
+		}		
 		return resultSet;
 	}
 

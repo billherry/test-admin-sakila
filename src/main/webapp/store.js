@@ -2,6 +2,7 @@ Ext.onReady(function() {
 
 	var store = new Ext.data.JsonStore({
 		autoDestroy : true,
+		totalProperty:'total',
 		storeId : 'myStore',
 		idProperty : 'actor_id',
 		root : 'actors',
@@ -20,15 +21,17 @@ Ext.onReady(function() {
 		} ]
 	});
 
-	var grid = CreateGrid(store, 10);
+	var grid = CreateGrid(store, 10	);
 
-	store.load({
+	store.load({		
 		callback : function() {
-			console.log(store.getCount());
-		}
+			console.log(store.getCount());			
+		},
+		params:{start:0,limit:10}
 	});
 
 	grid.render('array_grid');
-
+	
 	window.store = store;
+	window.grid = grid;
 });

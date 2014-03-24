@@ -40,6 +40,6 @@ function CreateGrid(store, pageSize) {
 		frame : false,
 		title : 'Actors form sakila'
 	});
-
+	
 	return grid;
 }
