@@ -43,15 +43,15 @@ public class ActorServlet extends HttpServlet {
 		
 		pageLimit = Integer.parseInt(request.getParameter("limit"));
 		pageStart = Integer.parseInt(request.getParameter("start"));
-		log.info("limit"+pageLimit);
-		log.info("start"+pageStart);
+		log.info("limit: "+pageLimit);
+		log.info("start: "+pageStart);
 		
 		try {
 			
 			JdbcHelper.openConnect();
 			JsonHelper jsonHelper = new JsonHelper();
 			JSONObject jsonObject = jsonHelper
-					.getJsonObject("SELECT * FROM actor LIMIT "+pageStart+","+pageLimit+")");
+					.getJsonObject("SELECT * FROM actor LIMIT "+pageStart+","+pageLimit+"");
 			//JSONObject jsonObject2 = jsonHelper.getJsonObject("select * from actor where actor_id = 42");	
 			writer.printf("%s", jsonObject);
 		} catch (Exception e) {			

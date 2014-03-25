@@ -21,13 +21,14 @@ Ext.onReady(function() {
 		} ]
 	});
 
-	var grid = CreateGrid(store, 10	);
+	var pageSize = 10;
+	var grid = CreateGrid(store, pageSize);
 
 	store.load({		
 		callback : function() {
 			console.log(store.getCount());			
 		},
-		params:{start:0,limit:10}
+		params:{start:0,limit:pageSize}
 	});
 
 	grid.render('array_grid');
