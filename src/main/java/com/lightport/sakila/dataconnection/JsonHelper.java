@@ -10,43 +10,59 @@ import org.json.JSONObject;
 
 public class JsonHelper {
 
+	private JdbcHelper jdbc;
+
+	public JsonHelper(JdbcHelper jdbc) {
+		this.jdbc = jdbc;
+
+	}
+
 	public JSONObject getJsonObject(String query) throws Exception {
 		JSONObject jsonObject = new JSONObject();
 		
-		ResultSet resultSet = JdbcHelper.getResultSet(query);
+		ResultSet resultSet = jdbc.getResultSet(query);
 		ResultSetMetaData metaData = resultSet.getMetaData();
-		int columnCount = metaData.getColumnCount();		
-
-		HashMap<String, Object> map;
+		int columnCount = metaData.getColumnCount();
 		ArrayList<HashMap<String, Object>> list = new ArrayList<>();
 
 		while (resultSet.next()) {
-			map = new HashMap<>();
-			for (int i = 1; i <= columnCount; i++) {
-				String key = metaData.getColumnName(i);
-				Object value = resultSet.getObject(i);
-				map.put(key, value);
-			}
+			HashMap<String, Object> map = mapFromResultSet(columnCount,
+					metaData, resultSet);
 			list.add(map);
 		}
-		
-		ResultSet totalResultSet = getResultSet("SELECT COUNT(*) FROM actor;");
-		totalResultSet.last();
-		int total = totalResultSet.getInt(1);
-		
+		int total = calculateTotal();
 		jsonObject .put("total", total);
 		jsonObject.put("actors", list);
 
 		return jsonObject;
 	}
+
+	private HashMap<String, Object> mapFromResultSet(int columnCount,
+			ResultSetMetaData metaData, ResultSet resultSet)
+			throws SQLException {
+		HashMap<String, Object> map = new HashMap<>();
+		for (int i = 1; i <= columnCount; i++) {
+			String key = metaData.getColumnName(i);
+			Object value = resultSet.getObject(i);
+			map.put(key, value);
+		}
+		return map;
+	}
+
+	private int calculateTotal() throws Exception, SQLException {
+		ResultSet totalResultSet = getResultSet("SELECT COUNT(*) FROM actor;");
+		totalResultSet.last();
+		int total = totalResultSet.getInt(1);
+		return total;
+	}
 	
 	public ResultSet getResultSet(String query) throws Exception{
 		ResultSet resultSet = null;
-		if(JdbcHelper.isConnected()) {
-			resultSet = JdbcHelper.getResultSet(query);
+		if (jdbc.isConnected()) {
+			resultSet = jdbc.getResultSet(query);
 		}else{
-			JdbcHelper.openConnect();
-			resultSet = JdbcHelper.getResultSet(query);
+			jdbc.openConnect();
+			resultSet = jdbc.getResultSet(query);
 		}		
 		return resultSet;
 	}

@@ -10,21 +10,31 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 public class JdbcHelper {
-	public static Connection conn;
-	private static Statement st;
-	private static ResultSet rs;
-	private static Log log;
+	public Connection conn;
+	private Statement st;
+	private ResultSet rs;
+	private Log log;
 	
-	public static void openConnect() throws Exception {
-		
+	public void openConnect(String type, String host, String port,
+			String database, String username, String pass) throws Exception {
+		log = LogFactory.getLog(Class.class);
+		Class.forName("com.mysql.jdbc.Driver");
+		conn = DriverManager.getConnection(
+"jdbc:" + type + "://" + port + ":"
+				+ host + "/" + database + "", username, pass);
+		st = conn.createStatement();
+		log.info("connection succes");
+	}
+
+	public void openConnect() throws Exception {
 			log = LogFactory.getLog(Class.class);
 			Class.forName("com.mysql.jdbc.Driver");
 			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/sakila","root","root");
 			st = conn.createStatement();
-			log.info("connection succes");
-			
+		log.info("connection succes");
 	}
-	public static ResultSet getResultSet(String query){
+
+	public ResultSet getResultSet(String query) {
 		try {			
 			rs = st.executeQuery(query);
 		} catch (SQLException e) {
@@ -33,7 +43,7 @@ public class JdbcHelper {
 		return rs;
 	}
 	
-	public static boolean isConnected(){
+	public boolean isConnected() {
 		return conn !=null;
 	}
 }

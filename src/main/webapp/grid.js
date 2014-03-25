@@ -30,6 +30,9 @@ function CreateGrid(store, pageSize) {
 			displayInfo : true,
 			pageSize : pageSize,
 			prependButtons : true,
+			doRefresh : function(){
+		        this.doLoad(this.cursor);
+		    },
 			items : [ 'text 1' ]
 		}),
 		sm : new Ext.grid.RowSelectionModel({
@@ -39,7 +42,6 @@ function CreateGrid(store, pageSize) {
 		height : 300,
 		frame : false,
 		title : 'Actors form sakila'
-	});
-	
+	});	
 	return grid;
 }
