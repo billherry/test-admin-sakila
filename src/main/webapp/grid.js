@@ -1,6 +1,6 @@
 function CreateGrid(store, pageSize) {
 	var grid = new Ext.grid.GridPanel({
-		store : store,
+		store : store,		
 		colModel : new Ext.grid.ColumnModel({
 			defaults : {
 				width : 100,

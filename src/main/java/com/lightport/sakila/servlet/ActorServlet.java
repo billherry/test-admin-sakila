@@ -35,8 +35,10 @@ public class ActorServlet extends HttpServlet {
 
 		int pageLimit = Integer.parseInt(request.getParameter("limit"));
 		int pageStart = Integer.parseInt(request.getParameter("start"));
+		String column = request.getParameter("sort");
+		String asc = request.getParameter("dir");
 		ActorServletContext actorServletContext = new ActorServletContext(
-				pageLimit, pageStart);
+				pageLimit, pageStart, column, asc);
 		actorServletContext.createConnection();
 		JSONObject jsonObject = actorServletContext.getJsonObject();
 		writer.printf("%s", jsonObject);

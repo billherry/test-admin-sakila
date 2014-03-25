@@ -3,6 +3,7 @@ Ext.onReady(function() {
 	var pageSize = 10;
 	var store = new Ext.data.JsonStore({
 		autoDestroy : true,
+		remoteSort: true,
 		totalProperty:'total',
 		storeId : 'myStore',
 		idProperty : 'actor_id',
