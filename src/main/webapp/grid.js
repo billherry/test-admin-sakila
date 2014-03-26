@@ -1,5 +1,5 @@
 function CreateGrid(store, pageSize) {
-	//var filter = CreateFilter();
+	var filter = CreateFilter();
 	var grid = new Ext.grid.GridPanel({
 		store : store,		
 		colModel : new Ext.grid.ColumnModel({
@@ -40,6 +40,6 @@ function CreateGrid(store, pageSize) {
 		height : 300,
 		frame : false,
 		title : 'Actors form sakila'
-	});	
+	});
 	return grid;
 }
