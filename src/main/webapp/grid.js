@@ -26,12 +26,14 @@ function CreateGrid(store, pageSize) {
 				format : 'Y.M.d'
 			} ]
 		}),
+		plugins: [filter],
 		bbar : new Ext.PagingToolbar({
 			store : store,
 			displayInfo : true,
 			pageSize : pageSize,
 			prependButtons : true,
-			items : [ 'text 1' ]
+			items : [ 'text 1' ],
+			plugins:[filter]
 		}),
 		sm : new Ext.grid.RowSelectionModel({
 			singleSelect : true

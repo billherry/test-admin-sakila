@@ -8,7 +8,6 @@ Ext.onReady(function() {
 		storeId : 'myStore',
 		idProperty : 'actor_id',
 		root : 'actors',
-		params :{start:0,limit:pageSize},
 		proxy : new Ext.data.HttpProxy({
 			method : 'GET',
 			type : 'ajax',
