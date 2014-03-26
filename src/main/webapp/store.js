@@ -7,7 +7,6 @@ Ext.onReady(function() {
 		totalProperty:'total',
 		storeId : 'myStore',
 		idProperty : 'actor_id',
-		autoLoad: {params : {start:0, limit: 10}}, //csak a külön load helyett
 		root : 'actors',
 		params :{start:0,limit:pageSize},
 		proxy : new Ext.data.HttpProxy({
@@ -26,6 +25,7 @@ Ext.onReady(function() {
 	});
 	
 	var grid = CreateGrid(store, pageSize);	
+	grid.getBottomToolbar().doRefresh();
 	grid.render('array_grid');
 	window.store = store;
 	window.grid = grid;

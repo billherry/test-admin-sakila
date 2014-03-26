@@ -1,4 +1,5 @@
 function CreateGrid(store, pageSize) {
+	//var filter = CreateFilter();
 	var grid = new Ext.grid.GridPanel({
 		store : store,		
 		colModel : new Ext.grid.ColumnModel({
@@ -30,9 +31,6 @@ function CreateGrid(store, pageSize) {
 			displayInfo : true,
 			pageSize : pageSize,
 			prependButtons : true,
-			doRefresh : function(){
-		        this.doLoad(this.cursor);
-		    },
 			items : [ 'text 1' ]
 		}),
 		sm : new Ext.grid.RowSelectionModel({
