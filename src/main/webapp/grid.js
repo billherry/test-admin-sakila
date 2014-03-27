@@ -32,8 +32,7 @@ function CreateGrid(store, pageSize) {
 			displayInfo : true,
 			pageSize : pageSize,
 			prependButtons : true,
-			items : [ 'text 1' ],
-			plugins:[filter]
+			items : [ 'text 1' ]
 		}),
 		sm : new Ext.grid.RowSelectionModel({
 			singleSelect : true

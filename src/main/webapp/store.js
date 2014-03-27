@@ -7,7 +7,7 @@ Ext.onReady(function() {
 		totalProperty:'total',
 		storeId : 'myStore',
 		idProperty : 'actor_id',
-		root : 'actors',
+		root : 'items',
 		proxy : new Ext.data.HttpProxy({
 			method : 'GET',
 			type : 'ajax',

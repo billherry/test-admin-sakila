@@ -19,8 +19,8 @@ public class JdbcHelper {
 			throws Exception {
 		log = LogFactory.getLog(Class.class);
 		Class.forName("com.mysql.jdbc.Driver");
-		conn = DriverManager.getConnection("jdbc:" + type + "://" + port + ":" + host + "/" + database + "", username,
-				pass);
+		String connectionString = String.format("jdbc:%s://%s:%s/%s", type, port, host, database);
+		conn = DriverManager.getConnection(connectionString, username, pass);
 		st = conn.createStatement();
 		log.info("connection succes");
 	}
