@@ -1,7 +1,5 @@
 package com.lightport.sakila.servlet;
 
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 
 public class RequestContext {
@@ -9,12 +7,11 @@ public class RequestContext {
 	private ActorHandler actorhandler;
 
 	public RequestContext(HttpServletRequest request) throws Exception {
-		Map<String, String[]> parameterMap = request.getParameterMap();
-		initActorHandler(parameterMap);
+		initActorHandler(request);
 	}
 
-	private void initActorHandler(Map<String, String[]> parameterMap) throws Exception {
-		actorhandler = new ActorHandler(parameterMap);
+	private void initActorHandler(HttpServletRequest request) throws Exception {
+		actorhandler = new ActorHandler(request);
 	}
 
 	public String getResponse() {

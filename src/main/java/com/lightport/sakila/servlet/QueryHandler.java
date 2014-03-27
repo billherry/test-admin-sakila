@@ -1,7 +1,8 @@
 package com.lightport.sakila.servlet;
 
 import java.util.List;
-import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 public class QueryHandler {
 
@@ -9,25 +10,45 @@ public class QueryHandler {
 	private String limit;
 	private String start;
 	private String table;
+	private String columnNameForSorting;
+	private String dirSorting;
+	private String returnQuery;
 
-	public QueryHandler(Map<String, String[]> parameterMap, String table) {
-		limit = parameterMap.get("limit")[0];
-		start = parameterMap.get("start")[0];
+	public QueryHandler(HttpServletRequest request, String table) {
+		limit = request.getParameter("limit");
+		start = request.getParameter("start");
+		columnNameForSorting = request.getParameter("sort");
+		dirSorting = request.getParameter("dir");
+		returnQuery = "SELECT * FROM " + table + " ";
 		this.table = table;
+		addFilter(request);
+
+		if (columnNameForSorting != null && dirSorting != null)
+			addSortingToQuery();
+		addPagingQuery();
 	}
 
-	private void addFilter(FilterInfo filterInfo) {
-		// TODO
-		this.filters.add(filterInfo);
+	private void addSortingToQuery() {
+		String sotring = String.format(" ORDER BY %s %s ", columnNameForSorting, dirSorting);
+		returnQuery += sotring;
+	}
+
+	private void addFilter(HttpServletRequest request) {
+
 	}
 	
-	public String getQueryString() {
-		String ret = String.format("SELECT * FROM %s LIMIT %s,%s ", table, start, limit);
-		return ret;
+	private void addPagingQuery() {
+		String paging = String.format("LIMIT %s,%s;", start, limit);
+		returnQuery += paging;
 	}
 
 	public String getTotalCountQuery() {
 		String ret = String.format("SELECT COUNT(*) FROM %s;", table);
 		return ret;
+	}
+	
+	public String getQueryString() {
+		System.out.println(returnQuery);
+		return returnQuery;
 	}
 }

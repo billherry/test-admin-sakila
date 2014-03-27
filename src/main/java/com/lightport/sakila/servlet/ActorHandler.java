@@ -2,7 +2,8 @@ package com.lightport.sakila.servlet;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.json.JSONObject;
 
@@ -15,9 +16,9 @@ public class ActorHandler {
 	private JSONObject jsonObject;
 	private QueryHandler queryHandler;
 
-	public ActorHandler(Map<String, String[]> parameterMap) throws Exception {
+	public ActorHandler(HttpServletRequest request) throws Exception {
 		jdbcConnect();
-		String queryFromParams = getQueryFromParams(parameterMap);
+		String queryFromParams = getQueryFromParams(request);
 		ResultSet resultSet = getResultSet(queryFromParams);
 		JsonHelper jsonHelper = new JsonHelper();
 		jsonObject = jsonHelper.getJsonObject(resultSet);
@@ -33,8 +34,8 @@ public class ActorHandler {
 		return jdbcHelper.getResultSet(query);
 	}
 
-	private String getQueryFromParams(Map<String, String[]> parameterMap) {
-		queryHandler = new QueryHandler(parameterMap, "actor");
+	private String getQueryFromParams(HttpServletRequest request) {
+		queryHandler = new QueryHandler(request, "actor");
 		return queryHandler.getQueryString();
 	}
 
