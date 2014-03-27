@@ -15,11 +15,6 @@ public class ActorHandler {
 	private JSONObject jsonObject;
 	private QueryHandler queryHandler;
 
-	private String pageLimit;
-	private String pageStart;
-	private String column;
-	private String asc;
-
 	public ActorHandler(Map<String, String[]> parameterMap) throws Exception {
 		jdbcConnect();
 		String queryFromParams = getQueryFromParams(parameterMap);

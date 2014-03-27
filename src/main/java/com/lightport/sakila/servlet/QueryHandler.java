@@ -17,6 +17,7 @@ public class QueryHandler {
 	}
 
 	private void addFilter(FilterInfo filterInfo) {
+		// TODO
 		this.filters.add(filterInfo);
 	}
 	

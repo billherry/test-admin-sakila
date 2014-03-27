@@ -6,16 +6,11 @@ import javax.servlet.http.HttpServletRequest;
 
 public class RequestContext {
 
-	private HttpServletRequest request;
 	private ActorHandler actorhandler;
 
 	public RequestContext(HttpServletRequest request) throws Exception {
-		this.request = request;
 		Map<String, String[]> parameterMap = request.getParameterMap();
 		initActorHandler(parameterMap);
-	}
-
-	public void Invoke() throws Exception {
 	}
 
 	private void initActorHandler(Map<String, String[]> parameterMap) throws Exception {
