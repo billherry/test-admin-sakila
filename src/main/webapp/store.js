@@ -21,7 +21,8 @@ Ext.onReady(function() {
 			type : 'date',
 			dateformat : 'c'
 		} ]		
-	});
+	});	
+	
 	
 	var grid = CreateGrid(store, pageSize);	
 	grid.getBottomToolbar().doRefresh();

@@ -2,6 +2,7 @@ package com.lightport.sakila.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,6 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import com.lightport.sakila.business.ActorHandler;
 
 @WebServlet("/ActorServlet")
 public class ActorServlet extends HttpServlet {
@@ -22,11 +25,11 @@ public class ActorServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		PrintWriter writer = response.getWriter();
-		RequestContext requestContext;
 		try {
-			requestContext = new RequestContext(request);
-			String resp = requestContext.getResponse();
-			writer.println(resp);
+			ActorRequestContext actorRequestContext = new ActorRequestContext(request);
+			Map<String, String> parametersMap = actorRequestContext.getRequestParameters();
+			ActorHandler actorHandler = new ActorHandler(parametersMap);
+
 			writer.flush();
 			writer.close();
 

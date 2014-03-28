@@ -15,6 +15,10 @@ public class JdbcHelper {
 	private ResultSet rs;
 	private Log log;
 
+	public Connection getConection() {
+		return this.conn;
+	}
+
 	public void openConnect(String type, String host, String port, String database, String username, String pass)
 			throws Exception {
 		log = LogFactory.getLog(Class.class);
