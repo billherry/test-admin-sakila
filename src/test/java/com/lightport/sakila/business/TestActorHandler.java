@@ -9,9 +9,6 @@ public class TestActorHandler {
 
 	@Test
 	public void testGetResultSet() throws Exception {
-		ActorHandler ah = new ActorHandler();
-		ResultSet rs = ah.getResultSet("SELECT * FROM actor");
-		outResultSet(rs);
 	}
 
 	private void outResultSet(ResultSet rs) throws SQLException {

@@ -1,4 +1,4 @@
-package com.lightport.sakila.servlet;
+package com.lightport.sakila.business;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,7 +13,7 @@ public class QueryHandler {
 	private String query;
 	StringBuilder stringBuilder;
 	PreparedStatement prepStatment;
-	ResultSet resultSet;
+	private String tableName;
 	
 
 	public ResultSet getResultSet() throws Exception {
@@ -23,29 +23,30 @@ public class QueryHandler {
 
 	public QueryHandler(Map<String, String> map, Connection connection, String tableName) throws Exception {
 
+		this.tableName = tableName;
 		start = map.get("start");
 		limit = map.get("limit");
 
 		stringBuilder = new StringBuilder();
-		buildQueryString(String.format("SELECT * FROM %s ", tableName));
-		initQuery();
+		
+		buildSelectQueryString();
+		specializationSelectQuery();
+		
 		query = stringBuilder.toString();
 		prepStatment = connection.prepareStatement(query);
 	}
 
-	private void initQuery() throws Exception {
+	private void specializationSelectQuery () throws Exception {
 		if (!start.equals("null") && !limit.equals("null")) {
-			buildQueryString(pagingQuery());
-			prepStatment.setInt(1, Integer.parseInt(start));
+			stringBuilder.append("LIMIT ? , ? ");			
 		}
 	}
 
-	private String pagingQuery() throws Exception {
-		return "LIMIT ? , ? ";
-		
+	private void buildSelectQueryString() {
+		stringBuilder.append((String.format("SELECT * FROM %s ", tableName)));
 	}
 
-	private void buildQueryString(String queryPart) {
-		stringBuilder.append(queryPart);
+	public PreparedStatement getPreparedStatement() {
+		return this.prepStatment;		
 	}
 }

@@ -13,8 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.lightport.sakila.business.ActorHandler;
-
 @WebServlet("/ActorServlet")
 public class ActorServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
