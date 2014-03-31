@@ -42,6 +42,10 @@ function CreateGrid(store, pageSize) {
 		frame : false,
 		title : 'Actors form sakila'
 	});
-	grid.getBottomToolbar().changePage(1);
+	
+	grid.getBottomToolbar().add([ '->',
+	                             {
+	                             }
+	                             ]);
 	return grid;
 }

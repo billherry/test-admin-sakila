@@ -55,8 +55,8 @@ public class ActorRequestContext {
 		String compValue = paramsMap.get(String.format("%s[data][comparison]", format));
 		String comparsion = setFilterCompararion(compValue);
 		String value = paramsMap.get(String.format("%s[data][value]", format));
-		FilterInfo fi = new FilterInfo(name, type, comparsion, value);
-		return fi;
+		FilterInfo info = new FilterInfo(name, type, comparsion, value);
+		return info;
 	}
 
 	private String setFilterCompararion(String compValue) {

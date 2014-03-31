@@ -16,27 +16,21 @@ public class ActorHandler {
 	private JsonHelper jsonHelper = new JsonHelper();
 	private JSONObject jsonObject;
 	private final String TABLE_NAME = "actor";
-	private final QueryHandler queryHandler;
+	private QueryHandler queryHandler;
+	private Map<String, String> map;
+	private List<FilterInfo> filters;
 
-	// JsonObject-et állít össze és QuerytHandler-t hív;
 	public ActorHandler(Map<String, String> map, List<FilterInfo> filters) throws Exception {
-		jdbcHelper.openConnect();
-		// SELECT query
-		queryHandler = new QueryHandler(map, jdbcHelper.conn, TABLE_NAME, filters);
-		String query = queryHandler.getQuery();
-		ResultSet resultSet = jdbcHelper.getResultSet(query);
-		// count Query
-		String countQuery = queryHandler.getCountQuery();
-		ResultSet countResultset = jdbcHelper.getResultSet(countQuery);
-		int jsonCount = setJsonCount(countResultset);
-		// Json beállítása
-		jsonObject = jsonHelper.getJsonObject(resultSet);
-		jsonHelper.setJsonItemCount(jsonCount, jsonObject);
+		this.map = map;
+		this.filters = filters;
+		initQueryHandler();
 	}
 
-	private int setJsonCount(ResultSet rs) throws Exception {
-		rs.last();
-		return rs.getInt(1);
+	private void initQueryHandler() throws Exception {
+		jdbcHelper.openConnect();
+		queryHandler = new QueryHandler(map, jdbcHelper.conn, TABLE_NAME, filters);
+		ResultSet resultSet = queryHandler.getResultSet();
+		jsonObject = jsonHelper.getJsonObject(resultSet);
 	}
 
 	public JSONObject getJsonObject() {

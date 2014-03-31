@@ -26,7 +26,6 @@ Ext.onReady(function() {
 	
 	var grid = CreateGrid(store, pageSize);	
 	grid.getBottomToolbar().doRefresh();
-	
 	grid.render('array_grid');
 	window.store = store;
 	window.grid = grid;

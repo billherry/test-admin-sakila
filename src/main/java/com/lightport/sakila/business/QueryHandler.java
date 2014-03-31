@@ -3,8 +3,11 @@ package com.lightport.sakila.business;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
 
 import com.lightport.sakila.servlet.FilterInfo;
 
@@ -22,14 +25,11 @@ public class QueryHandler {
 	private String firstFilter;
 	private StringBuilder whereBuilder;
 
-	// Paraméterek alapján SELECT..WHERE..ORDER BY..LIMIT utasítást állít elő és
-	// A hozzá tartozó SELECT COUNT(*)..WHERE-t
 	public QueryHandler(Map<String, String> map, Connection connection, String tableName, List<FilterInfo> filters)
 			throws Exception {
 
 		this.filters = filters;
 		this.tableName = tableName;
-
 		start = map.get("start");
 		limit = map.get("limit");
 		sortColumn = map.get("sort");
@@ -39,8 +39,11 @@ public class QueryHandler {
 		selectBuilder = new StringBuilder();
 		whereBuilder = new StringBuilder();
 		
+
 		buildQueryStart();
 		specializationSelectQuery();
+		prepStatment = connection.prepareStatement(this.selectBuilder.toString());
+		System.out.println("prepSt: " + prepStatment);
 	}
 
 	private void specializationSelectQuery () throws Exception {
@@ -60,19 +63,19 @@ public class QueryHandler {
 	private void addWhereToQuery() {
 		StringBuilder whereString = new StringBuilder();
 		whereString.append("WHERE ");
-		for (int i = 0; i < filters.size(); i++) {
-			if (i <= filters.size() - 1 && i > 0) {
-				whereString.append("AND ");
-			}
-			whereString.append(filters.get(i).toString());
+		List<String> list = new ArrayList<String>();
+		for (FilterInfo info : filters) {
+			list.add("? ? ?");
 		}
+		String join = StringUtils.join(list, " AND ");
+		whereString.append(join);
 		this.whereBuilder.append(whereString.toString());
 		this.selectBuilder.append(whereString.toString());
 	}
 
 	private void buildQueryStart() {
-		selectBuilder.append((String.format("SELECT * FROM %s ", tableName)));
-		whereBuilder.append((String.format("SELECT COUNT(*) FROM %s ", tableName)));
+		selectBuilder.append((String.format(" SELECT * FROM %s ", this.tableName)));
+		whereBuilder.append((String.format(" SELECT COUNT(*) FROM %s ", this.tableName)));
 	}
 
 	public String getCountQuery() {
@@ -84,7 +87,9 @@ public class QueryHandler {
 	}
 
 	public ResultSet getResultSet() throws Exception {
-		System.out.println(prepStatment);
+		for (FilterInfo info : this.filters) {
+			info.setParameter(prepStatment, filters.indexOf(info)+1);
+		}
 		return prepStatment.executeQuery();
 	}
 }
