@@ -2,8 +2,8 @@ package com.lightport.sakila.dataconnection;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -28,8 +28,11 @@ public class JdbcHelper {
 		log.info("connection succes");
 	}
 
-	public ResultSet getResultSet(PreparedStatement statement) throws Exception {
-		ResultSet rs = statement.executeQuery();
+	public ResultSet getResultSet(String statement) throws Exception {
+
+		System.out.println("END: " + statement);
+		Statement st = conn.createStatement();
+		ResultSet rs = st.executeQuery(statement);
 		return rs;
 	}
 

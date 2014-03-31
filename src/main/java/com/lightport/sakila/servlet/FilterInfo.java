@@ -12,29 +12,8 @@ public class FilterInfo {
 		this.comparsion = comparsion;
 		this.value = value;
 	}
-	public String getColumnName() {
-		return column;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public String getComparsion() {
-		if(comparsion.equals("gt"))
-			comparsion = Comparators.GREATER_THAN.toString();
-		else if(comparsion.equals("lt"))
-			comparsion = Comparators.LESS_THAN.toString();
-		else if (comparsion.equals("eq"))
-			comparsion = Comparators.EQUALS.toString();
-		
-		return comparsion;
-	}
-
-	public String getValue() {		
-		if(type.equals("string"))
-		this.value = "'"+this.value+"'";
-		
-		return this.value;
+	// where feltételnek megfelelő szerkezet Pl: actor_id < 50
+	public String toString() {
+		return String.format("%s %s '%s' ", this.column, this.comparsion, this.value);
 	}
 }

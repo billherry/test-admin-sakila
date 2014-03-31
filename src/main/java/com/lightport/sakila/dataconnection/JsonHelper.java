@@ -30,6 +30,11 @@ public class JsonHelper {
 		}
 		jsonObject.put("items", list);
 	}
+	
+	public void setJsonItemCount(int items, JSONObject jsonObject) {
+		jsonObject.put("total", items);
+		System.out.println(jsonObject);
+	}
 
 	private HashMap<String, Object> mapFromResultSet(int columnCount, ResultSetMetaData metaData, ResultSet resultSet)
 			throws SQLException {

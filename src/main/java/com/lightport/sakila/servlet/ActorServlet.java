@@ -2,6 +2,7 @@ package com.lightport.sakila.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.json.JSONObject;
 
 @WebServlet("/ActorServlet")
 public class ActorServlet extends HttpServlet {
@@ -26,7 +28,10 @@ public class ActorServlet extends HttpServlet {
 		try {
 			ActorRequestContext actorRequestContext = new ActorRequestContext(request);
 			Map<String, String> parametersMap = actorRequestContext.getRequestParameters();
-			ActorHandler actorHandler = new ActorHandler(parametersMap);
+			List<FilterInfo> filters = actorRequestContext.getFilters();
+			ActorHandler actorHandler = new ActorHandler(parametersMap, filters);
+			JSONObject jsonObject = actorHandler.getJsonObject();
+			writer.println(jsonObject);
 
 			writer.flush();
 			writer.close();
