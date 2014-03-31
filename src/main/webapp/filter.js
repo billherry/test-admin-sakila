@@ -6,7 +6,7 @@ function CreateFilter() {
 		}, {
 			type : 'string',
 			dataIndex : 'first_name',
-			disabled : true
+			disable : true
 		}, {
 			type : 'string',
 			dataIndex : 'last_name',

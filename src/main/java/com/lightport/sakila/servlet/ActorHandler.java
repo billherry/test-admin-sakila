@@ -18,19 +18,18 @@ public class ActorHandler {
 	private final String TABLE_NAME = "actor";
 	private final QueryHandler queryHandler;
 
-	// JsonObjectet állít össze és QuerytHandler-t hív;
+	// JsonObject-et állít össze és QuerytHandler-t hív;
 	public ActorHandler(Map<String, String> map, List<FilterInfo> filters) throws Exception {
 		jdbcHelper.openConnect();
+		// SELECT query
 		queryHandler = new QueryHandler(map, jdbcHelper.conn, TABLE_NAME, filters);
-
 		String query = queryHandler.getQuery();
 		ResultSet resultSet = jdbcHelper.getResultSet(query);
-
+		// count Query
 		String countQuery = queryHandler.getCountQuery();
-		System.out.println(countQuery);
 		ResultSet countResultset = jdbcHelper.getResultSet(countQuery);
 		int jsonCount = setJsonCount(countResultset);
-
+		// Json beállítása
 		jsonObject = jsonHelper.getJsonObject(resultSet);
 		jsonHelper.setJsonItemCount(jsonCount, jsonObject);
 	}

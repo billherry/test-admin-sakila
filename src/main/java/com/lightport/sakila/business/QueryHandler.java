@@ -22,11 +22,6 @@ public class QueryHandler {
 	private String firstFilter;
 	private StringBuilder whereBuilder;
 
-	public ResultSet getResultSet() throws Exception {
-		System.out.println(prepStatment);
-		return prepStatment.executeQuery();
-	}
-
 	// Paraméterek alapján SELECT..WHERE..ORDER BY..LIMIT utasítást állít elő és
 	// A hozzá tartozó SELECT COUNT(*)..WHERE-t
 	public QueryHandler(Map<String, String> map, Connection connection, String tableName, List<FilterInfo> filters)
@@ -86,5 +81,10 @@ public class QueryHandler {
 
 	public String getQuery() {
 		return this.selectBuilder.toString();
+	}
+
+	public ResultSet getResultSet() throws Exception {
+		System.out.println(prepStatment);
+		return prepStatment.executeQuery();
 	}
 }
