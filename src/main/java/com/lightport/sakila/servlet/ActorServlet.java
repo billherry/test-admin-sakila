@@ -74,12 +74,14 @@ public class ActorServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		PrintWriter writer = response.getWriter();
 		try {
+			requestValidatror(request);
 			dataSource = JdbcHelper.getDataSource();
 			Connection connection = dataSource.getConnection();
-			requestValidatror(request);
+
 			ActorRequestContext actorRequestContext = new ActorRequestContext(request);
 			Map<String, String> parametersMap = actorRequestContext.getRequestParameters();
 			List<FilterInfo> filters = actorRequestContext.getFilters();
+
 			ActorHandler actorHandler = new ActorHandler(parametersMap, filters, connection);
 			JSONObject jsonObject = actorHandler.getJsonObject();
 			writer.println(jsonObject);
@@ -94,7 +96,7 @@ public class ActorServlet extends HttpServlet {
 	}
 
 	private void requestValidatror(HttpServletRequest request) {
-		request.getParameter("");
+		// paraméterek validálása?
 
 	}
 
