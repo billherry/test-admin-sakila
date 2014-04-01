@@ -1,4 +1,4 @@
-package com.lightport.sakila.servlet;
+package com.lightport.sakila.dataconnection;
 
 import java.sql.PreparedStatement;
 
@@ -27,10 +27,15 @@ public class FilterInfo {
 		this.value = value;
 	}
 	public void setParameter(PreparedStatement preparedStatement, int position) throws Exception {
-		if (this.type == "string") {
+		if (this.type.equals("string")) {
 			preparedStatement.setString(position, this.value);
 		}
-		if(this.type == "number")
+ else if (this.type.equals("numeric")) {
 			preparedStatement.setInt(position, Integer.parseInt(this.value));
+		}
+ else if (this.type.equals("date")) {
+			//
+		}
+
 	}
 }

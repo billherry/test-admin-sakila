@@ -8,13 +8,14 @@ import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.lightport.sakila.dataconnection.FilterInfo;
+
 public class ActorRequestContext {
 
 	private Map<String, String[]> requestMap;
 	private Map<String, String> paramsMap;
 	List<FilterInfo> filters;
 
-	// request- ből map-ot csinál, a filtereket listába teszi
 	public ActorRequestContext(HttpServletRequest request) throws Exception {
 		filters = new ArrayList<>();
 		paramsMap = new HashMap<String, String>();

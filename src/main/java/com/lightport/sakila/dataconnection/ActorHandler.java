@@ -1,4 +1,4 @@
-package com.lightport.sakila.servlet;
+package com.lightport.sakila.dataconnection;
 
 import java.sql.ResultSet;
 import java.util.List;
@@ -7,12 +7,10 @@ import java.util.Map;
 import org.json.JSONObject;
 
 import com.lightport.sakila.business.QueryHandler;
-import com.lightport.sakila.dataconnection.JdbcHelper;
-import com.lightport.sakila.dataconnection.JsonHelper;
 
 public class ActorHandler {
 
-	private JdbcHelper jdbcHelper = new JdbcHelper();
+	private JdbcHelper jdbcHelper;
 	private JsonHelper jsonHelper = new JsonHelper();
 	private JSONObject jsonObject;
 	private final String TABLE_NAME = "actor";
@@ -23,18 +21,27 @@ public class ActorHandler {
 	public ActorHandler(Map<String, String> map, List<FilterInfo> filters) throws Exception {
 		this.map = map;
 		this.filters = filters;
+		jdbcHelper = new JdbcHelper();
 		initQueryHandler();
 	}
 
 	private void initQueryHandler() throws Exception {
 		jdbcHelper.openConnect();
 		queryHandler = new QueryHandler(map, jdbcHelper.conn, TABLE_NAME, filters);
-		ResultSet resultSet = queryHandler.getResultSet();
-		jsonObject = jsonHelper.getJsonObject(resultSet);
+		ResultSet selectResultSet = queryHandler.getSelectResultSet();
+		ResultSet countResultSet = queryHandler.getCountResultSet();
+		jsonObject = jsonHelper.getJsonObject(selectResultSet);
+		int jsonCount = jsonCount(countResultSet);
+		jsonObject.put("total", jsonCount);
 	}
 
 	public JSONObject getJsonObject() {
 		return this.jsonObject;
+	}
+
+	private int jsonCount(ResultSet countResultSet) throws Exception {
+		countResultSet.last();
+		return countResultSet.getInt(1);
 	}
 
 }

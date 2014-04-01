@@ -15,6 +15,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.JSONObject;
 
+import com.lightport.sakila.dataconnection.ActorHandler;
+import com.lightport.sakila.dataconnection.FilterInfo;
+
 @WebServlet("/ActorServlet")
 public class ActorServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
