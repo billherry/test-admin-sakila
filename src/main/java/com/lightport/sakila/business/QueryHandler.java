@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.lightport.sakila.dataconnection.ActorHandler;
 import com.lightport.sakila.dataconnection.FilterInfo;
 
 public class QueryHandler {
@@ -46,21 +47,38 @@ public class QueryHandler {
 	}
 
 	private void queryParser() throws Exception {
+			validWhere();
+			validOrdeyBy();
+			validLimitOffset();
+	}
+
+	private void validWhere() {
 		if (!filters.isEmpty()) {
-			addWhereToBuilders(countBuilder);
-			addWhereToBuilders(selectBuilder);
+			addWhereToBuilder(countBuilder);
+			addWhereToBuilder(selectBuilder);
 		}
+	}
 
-		if ((sortColumn != null && !sortColumn.isEmpty()) && (sortDirection != null && !sortDirection.isEmpty())) {
-			selectBuilder.append(String.format("ORDER BY %s %s ", sortColumn, sortDirection));
-		}
-
-		if ((limit != null && !limit.isEmpty()) && (start != null && !start.isEmpty())) {
+	private void validLimitOffset() {
+		int limit = Integer.parseInt(this.limit);
+		int start = Integer.parseInt(this.start);
+		if (limit > 0 && start >= 0) {
 			selectBuilder.append(String.format("LIMIT %s , %s ", start, limit));
 		}
 	}
 
-	private void addWhereToBuilders(StringBuilder builder) {
+	private void validOrdeyBy() throws Exception {
+		List<String> actorColumns = ActorHandler.getActorColumns();
+		if (actorColumns.contains(this.sortColumn)) {
+			if (sortDirection.equals("DESC")) {
+				selectBuilder.append(String.format("ORDER BY %s %s ", sortColumn, sortDirection));
+			} else {
+				selectBuilder.append(String.format("ORDER BY %s ASC ", sortColumn));
+			}
+		}
+	}
+
+	private void addWhereToBuilder(StringBuilder builder) {
 		StringBuilder whereString = new StringBuilder();
 		whereString.append("WHERE ");
 		List<String> list = new ArrayList<>();
