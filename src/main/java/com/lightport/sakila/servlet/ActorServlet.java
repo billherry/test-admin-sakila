@@ -37,8 +37,6 @@ public class ActorServlet extends HttpServlet {
 	}
 
 	static public List<String> getActorColumns(ResultSetMetaData actorMetadata) throws Exception {
-		JdbcHelper jdbcHelper = new JdbcHelper();
-		jdbcHelper.openConnect();
 		List<String> actorColumns = new ArrayList<String>();
 
 		int columnCount = actorMetadata.getColumnCount();
@@ -66,6 +64,7 @@ public class ActorServlet extends HttpServlet {
 			ResultSetMetaData actorMetadata = getMetadata();
 			List<String> actorColumns = getActorColumns(actorMetadata);
 			// ActorHandler static // member / method
+			System.out.println(actorColumns);
 			ActorHandler.setActorCoulomns(actorColumns);
 		} catch (Exception e) {
 			throw new ServletException(e);
@@ -75,11 +74,13 @@ public class ActorServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		PrintWriter writer = response.getWriter();
 		try {
+			dataSource = JdbcHelper.getDataSource();
+			Connection connection = dataSource.getConnection();
 			requestValidatror(request);
 			ActorRequestContext actorRequestContext = new ActorRequestContext(request);
 			Map<String, String> parametersMap = actorRequestContext.getRequestParameters();
 			List<FilterInfo> filters = actorRequestContext.getFilters();
-			ActorHandler actorHandler = new ActorHandler(parametersMap, filters);
+			ActorHandler actorHandler = new ActorHandler(parametersMap, filters, connection);
 			JSONObject jsonObject = actorHandler.getJsonObject();
 			writer.println(jsonObject);
 

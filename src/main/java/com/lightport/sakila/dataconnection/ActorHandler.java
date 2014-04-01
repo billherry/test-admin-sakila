@@ -1,5 +1,6 @@
 package com.lightport.sakila.dataconnection;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.List;
 import java.util.Map;
@@ -18,17 +19,17 @@ public class ActorHandler {
 	private Map<String, String> map;
 	private List<FilterInfo> filters;
 	private static List<String> actorColumns;
+	private Connection connection;
 
-	public ActorHandler(Map<String, String> map, List<FilterInfo> filters) throws Exception {
+	public ActorHandler(Map<String, String> map, List<FilterInfo> filters, Connection connection) throws Exception {
 		this.map = map;
 		this.filters = filters;
-		jdbcHelper = new JdbcHelper();
+		this.connection = connection;
 		initQueryHandler();
 	}
 
 	private void initQueryHandler() throws Exception {
-		jdbcHelper.openConnect();
-		queryHandler = new QueryHandler(map, jdbcHelper.conn, TABLE_NAME, filters);
+		queryHandler = new QueryHandler(map, connection, TABLE_NAME, filters);
 		ResultSet selectResultSet = queryHandler.getSelectResultSet();
 		ResultSet countResultSet = queryHandler.getCountResultSet();
 		jsonObject = jsonHelper.getJsonObject(selectResultSet);
