@@ -1,8 +1,6 @@
 package com.lightport.sakila.dataconnection;
 
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -47,16 +45,11 @@ public class ActorHandler {
 		return countResultSet.getInt(1);
 	}
 
-	static public List<String> getActorColumns() throws Exception {
-		JdbcHelper jdbcHelper = new JdbcHelper();
-		jdbcHelper.openConnect();
-		actorColumns = new ArrayList<String>();
-		ResultSetMetaData actorMetadata = jdbcHelper.getTableMetadata("actor");
-		int columnCount = actorMetadata.getColumnCount();
-		for (int i = 0; i < columnCount; i++) {
-			actorColumns.add(actorMetadata.getColumnLabel(i + 1));
-		}
+	public static List<String> getActorCoulomns() {
 		return actorColumns;
 	}
 
+	public static void setActorCoulomns(List<String> actor_Columns) {
+		actorColumns = actor_Columns;
+	}
 }

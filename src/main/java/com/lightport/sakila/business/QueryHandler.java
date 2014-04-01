@@ -68,7 +68,7 @@ public class QueryHandler {
 	}
 
 	private void validOrdeyBy() throws Exception {
-		List<String> actorColumns = ActorHandler.getActorColumns();
+		List<String> actorColumns = ActorHandler.getActorCoulomns();
 		if (actorColumns.contains(this.sortColumn)) {
 			if (sortDirection.equals("DESC")) {
 				selectBuilder.append(String.format("ORDER BY %s %s ", sortColumn, sortDirection));
