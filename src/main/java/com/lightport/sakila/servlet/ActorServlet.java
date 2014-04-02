@@ -35,6 +35,8 @@ public class ActorServlet extends HttpServlet {
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 		try {
+			JdbcHelper.getDataSource();
+			JdbcHelper.addTableColumns("actor");
 		} catch (Exception e) {
 			throw new ServletException(e);
 		}

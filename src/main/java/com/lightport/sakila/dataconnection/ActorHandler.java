@@ -29,7 +29,6 @@ public class ActorHandler {
 		this.map = map;
 		this.filters = filters;
 		this.connection = connection;
-		JdbcHelper.addTableColumns(TABLE_NAME);
 		initQueryHandler();
 	}
 

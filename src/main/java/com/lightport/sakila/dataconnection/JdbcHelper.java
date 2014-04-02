@@ -16,7 +16,6 @@ import javax.sql.DataSource;
 
 public class JdbcHelper {
 	private static DataSource dataSource;
-	private Connection connection;
 	private static Map<String, List<String>> columnName;
 
 	static
