@@ -5,13 +5,14 @@ import java.sql.ResultSet;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.json.JSONObject;
 
 import com.lightport.sakila.business.QueryHandler;
 
 public class ActorHandler {
 
-	private JdbcHelper jdbcHelper;
 	private JsonHelper jsonHelper = new JsonHelper();
 	private JSONObject jsonObject;
 	private final String TABLE_NAME = "actor";
@@ -20,15 +21,20 @@ public class ActorHandler {
 	private List<FilterInfo> filters;
 	private static List<String> actorColumns;
 	private Connection connection;
+	private Log log;
 
 	public ActorHandler(Map<String, String> map, List<FilterInfo> filters, Connection connection) throws Exception {
+		log = LogFactory.getLog(Class.class);
+
 		this.map = map;
 		this.filters = filters;
 		this.connection = connection;
+		JdbcHelper.addTableColumns(TABLE_NAME);
 		initQueryHandler();
 	}
 
 	private void initQueryHandler() throws Exception {
+		log.info(String.format("\nActorHandler\nParameterMap:%s\nFilters: %s\nConnection:%s", map, filters, connection));
 		queryHandler = new QueryHandler(map, connection, TABLE_NAME, filters);
 		ResultSet selectResultSet = queryHandler.getSelectResultSet();
 		ResultSet countResultSet = queryHandler.getCountResultSet();
@@ -46,11 +52,8 @@ public class ActorHandler {
 		return countResultSet.getInt(1);
 	}
 
-	public static List<String> getActorCoulomns() {
+	public static List<String> getActorCoulomns() throws Exception {
+		actorColumns = JdbcHelper.getColumnNameList("actor");
 		return actorColumns;
-	}
-
-	public static void setActorCoulomns(List<String> actor_Columns) {
-		actorColumns = actor_Columns;
 	}
 }

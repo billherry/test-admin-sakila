@@ -7,11 +7,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.lightport.sakila.dataconnection.ActorHandler;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.lightport.sakila.dataconnection.FilterInfo;
+import com.lightport.sakila.dataconnection.JdbcHelper;
 
 public class QueryHandler {
 
+	private Log log;
 	private String start;
 	private String limit;
 	private String sortColumn;
@@ -24,7 +28,7 @@ public class QueryHandler {
 	private PreparedStatement countPrepStatement;
 	private List<FilterInfo> filters;
 	private Connection connection;
-
+	private List<String> columns;
 
 	public QueryHandler(Map<String, String> map, Connection connection, String tableName, List<FilterInfo> filters)
 			throws Exception {
@@ -37,8 +41,15 @@ public class QueryHandler {
 		this.sortColumn = map.get("sort");
 		this.sortDirection = map.get("dir");
 
+		initColumns();
 		buildQueryStart();
 		queryParser();
+	}
+
+	private void initColumns() throws Exception {
+		columns = JdbcHelper.getColumnNameList(tableName);
+		log = LogFactory.getLog(Class.class);
+		log.info(this.columns);
 	}
 
 	private void buildQueryStart() {
@@ -68,8 +79,7 @@ public class QueryHandler {
 	}
 
 	private void validOrdeyBy() throws Exception {
-		List<String> actorColumns = ActorHandler.getActorCoulomns();
-		if (actorColumns.contains(this.sortColumn)) {
+		if (columns.contains(this.sortColumn)) {
 			if (sortDirection.equals("DESC")) {
 				selectBuilder.append(String.format("ORDER BY %s %s ", sortColumn, sortDirection));
 			} else {

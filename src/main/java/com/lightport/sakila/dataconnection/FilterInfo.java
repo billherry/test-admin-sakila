@@ -38,4 +38,8 @@ public class FilterInfo {
 		}
 
 	}
+
+	public String toString() {
+		return String.format("Type: %s  Value: %s", type, value);
+	}
 }

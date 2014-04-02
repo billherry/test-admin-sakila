@@ -1,49 +1,55 @@
 package com.lightport.sakila.dataconnection;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 public class JdbcHelper {
-	public Connection conn;
-	private Log log;
+	private static DataSource dataSource;
+	private Connection connection;
+	private static Map<String, List<String>> columnName;
+
+	static
+	{
+		columnName = new HashMap<String, List<String>>();
+	}
+
+	static public List<String> getColumnNameList(String tableName) throws Exception {
+		return columnName.get(tableName);
+	}
+
+	static public void addTableColumns(String tableName) throws Exception {
+		ResultSetMetaData actorMetadata = getMetadata(tableName);
+		int columnCount = actorMetadata.getColumnCount();
+		List<String> tmpColumns = new ArrayList<>();
+		for (int i = 0; i < columnCount; i++) {
+			tmpColumns.add(actorMetadata.getColumnLabel(i + 1));
+		}
+		columnName.put(tableName, tmpColumns);
+	}
+
+	private static ResultSetMetaData getMetadata(String tableName) throws Exception, SQLException {
+		Connection connection = dataSource.getConnection();
+		Statement statement = connection.createStatement();
+		ResultSet resultSet = statement.executeQuery("SELECT * FROM " + tableName + " LIMIT 0,1");
+		ResultSetMetaData actorMetadata = resultSet.getMetaData();
+		return actorMetadata;
+	}
 
 	public static DataSource getDataSource() throws Exception {
 		Context initContext = new InitialContext();
 		Context envContext = (Context) initContext.lookup("java:/comp/env");
-		return (DataSource) envContext.lookup("jdbc/Sakila");
-	}
-
-	public void openConnect(String type, String host, String port, String database, String username, String pass)
-			throws Exception {
-		log = LogFactory.getLog(Class.class);
-		Class.forName("com.mysql.jdbc.Driver");
-		String connectionString = String.format("jdbc:%s://%s:%s/%s", type, port, host, database);
-		conn = DriverManager.getConnection(connectionString, username, pass);
-	}
-
-	public void openConnect() throws Exception {
-		log = LogFactory.getLog(Class.class);
-		Class.forName("com.mysql.jdbc.Driver");
-		conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/sakila", "root", "root");
-	}
-
-	public Connection getConection() {
-		return this.conn;
-	}
-
-	public ResultSetMetaData getTableMetadata(String tableName) throws Exception {
-		PreparedStatement preparedStatement = conn.prepareStatement("SELECT * FROM " + tableName);
-		ResultSet resultSet = preparedStatement.executeQuery();
-		return resultSet.getMetaData();
+		dataSource = (DataSource) envContext.lookup("jdbc/Sakila");
+		return dataSource;
 	}
 }

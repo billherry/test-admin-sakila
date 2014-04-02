@@ -3,11 +3,6 @@ package com.lightport.sakila.servlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -30,42 +25,16 @@ import com.lightport.sakila.dataconnection.JdbcHelper;
 @WebServlet("/ActorServlet")
 public class ActorServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private DataSource dataSource;
-
 	public ActorServlet() {
 		super();
 	}
 
-	static public List<String> getActorColumns(ResultSetMetaData actorMetadata) throws Exception {
-		List<String> actorColumns = new ArrayList<String>();
 
-		int columnCount = actorMetadata.getColumnCount();
-		for (int i = 0; i < columnCount; i++) {
-			actorColumns.add(actorMetadata.getColumnLabel(i + 1));
-		}
-		return actorColumns;
-	}
-
-	private ResultSetMetaData getMetadata() throws Exception, SQLException {
-		dataSource = JdbcHelper.getDataSource();
-		Connection connection = dataSource.getConnection();
-		Statement statement = connection.createStatement();
-		// query actor fields
-		ResultSet resultSet = statement.executeQuery("SELECT * FROM actor LIMIT 0,1");
-		ResultSetMetaData actorMetadata = resultSet.getMetaData();
-		return actorMetadata;
-	}
 
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 		try {
-			// ActorMetaData
-			ResultSetMetaData actorMetadata = getMetadata();
-			List<String> actorColumns = getActorColumns(actorMetadata);
-			// ActorHandler static // member / method
-			System.out.println(actorColumns);
-			ActorHandler.setActorCoulomns(actorColumns);
 		} catch (Exception e) {
 			throw new ServletException(e);
 		}
@@ -74,8 +43,7 @@ public class ActorServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		PrintWriter writer = response.getWriter();
 		try {
-			requestValidatror(request);
-			dataSource = JdbcHelper.getDataSource();
+			DataSource dataSource = JdbcHelper.getDataSource();
 			Connection connection = dataSource.getConnection();
 
 			ActorRequestContext actorRequestContext = new ActorRequestContext(request);
@@ -94,12 +62,6 @@ public class ActorServlet extends HttpServlet {
 			log.error(e.getMessage());
 		}
 	}
-
-	private void requestValidatror(HttpServletRequest request) {
-		// paraméterek validálása?
-
-	}
-
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,
 			IOException {
 		doGet(request, response);
