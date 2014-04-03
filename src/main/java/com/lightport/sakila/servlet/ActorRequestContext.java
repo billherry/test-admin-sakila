@@ -14,7 +14,7 @@ public class ActorRequestContext {
 
 	private Map<String, String[]> requestMap;
 	private Map<String, String> paramsMap;
-	List<FilterInfo> filters;
+	private List<FilterInfo> filters;
 
 	public ActorRequestContext(HttpServletRequest request) throws Exception {
 		filters = new ArrayList<>();

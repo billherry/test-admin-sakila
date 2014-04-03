@@ -14,8 +14,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
+import org.apache.catalina.connector.Response;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.lightport.sakila.dataconnection.ActorHandler;
@@ -25,17 +27,13 @@ import com.lightport.sakila.dataconnection.JdbcHelper;
 @WebServlet("/ActorServlet")
 public class ActorServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	public ActorServlet() {
-		super();
-	}
-
-
 
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 		try {
-			JdbcHelper.getDataSource();
+			String initParameter = config.getServletContext().getInitParameter("SakilaContextParam");
+			JdbcHelper.initDataSource(initParameter);
 			JdbcHelper.addTableColumns("actor");
 		} catch (Exception e) {
 			throw new ServletException(e);
@@ -43,7 +41,6 @@ public class ActorServlet extends HttpServlet {
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		PrintWriter writer = response.getWriter();
 		try {
 			DataSource dataSource = JdbcHelper.getDataSource();
 			Connection connection = dataSource.getConnection();
@@ -54,16 +51,33 @@ public class ActorServlet extends HttpServlet {
 
 			ActorHandler actorHandler = new ActorHandler(parametersMap, filters, connection);
 			JSONObject jsonObject = actorHandler.getJsonObject();
-			writer.println(jsonObject);
+			writeResponse(jsonObject.toString(), response.getWriter());
 
-			writer.flush();
-			writer.close();
-
+		} catch (JSONException e) {
+			Log log = LogFactory.getLog(Class.class);
+			log.error("JsonParseError" + e.getMessage());
+			writeException(response.getWriter(), e);
 		} catch (Exception e) {
 			Log log = LogFactory.getLog(Class.class);
-			log.error(e.getMessage());
+			log.error("DatabaseError" + e.getMessage());
+			writeException(response.getWriter(), e);
 		}
 	}
+
+	private void writeResponse(String out, PrintWriter writer) {
+		try{
+			writer.println(out);
+			writer.flush();
+			writer.close();
+		} catch (Exception e) {
+			writeException(writer, e);
+		}
+	}
+
+	private void writeException(PrintWriter writer, Exception e) {
+		writer.println(String.format("%s Error:%s", Response.SC_INTERNAL_SERVER_ERROR, e.getMessage()));
+	}
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,
 			IOException {
 		doGet(request, response);

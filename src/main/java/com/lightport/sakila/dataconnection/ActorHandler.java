@@ -13,13 +13,11 @@ import com.lightport.sakila.business.QueryHandler;
 
 public class ActorHandler {
 
-	private JsonHelper jsonHelper = new JsonHelper();
 	private JSONObject jsonObject;
 	private final String TABLE_NAME = "actor";
 	private QueryHandler queryHandler;
 	private Map<String, String> map;
 	private List<FilterInfo> filters;
-	private static List<String> actorColumns;
 	private Connection connection;
 	private Log log;
 
@@ -33,11 +31,11 @@ public class ActorHandler {
 	}
 
 	private void initQueryHandler() throws Exception {
-		log.info(String.format("\nActorHandler\nParameterMap:%s\nFilters: %s\nConnection:%s", map, filters, connection));
+		log.info(String.format("ActorHandler ParameterMap:%s Filters: %s Connection:%s", map, filters, connection));
 		queryHandler = new QueryHandler(map, connection, TABLE_NAME, filters);
 		ResultSet selectResultSet = queryHandler.getSelectResultSet();
 		ResultSet countResultSet = queryHandler.getCountResultSet();
-		jsonObject = jsonHelper.getJsonObject(selectResultSet);
+		jsonObject = JsonHelper.getJsonObject(selectResultSet);
 		int jsonCount = jsonCount(countResultSet);
 		jsonObject.put("total", jsonCount);
 	}
@@ -49,10 +47,5 @@ public class ActorHandler {
 	private int jsonCount(ResultSet countResultSet) throws Exception {
 		countResultSet.last();
 		return countResultSet.getInt(1);
-	}
-
-	public static List<String> getActorCoulomns() throws Exception {
-		actorColumns = JdbcHelper.getColumnNameList("actor");
-		return actorColumns;
 	}
 }

@@ -5,10 +5,10 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -16,21 +16,20 @@ import javax.sql.DataSource;
 
 public class JdbcHelper {
 	private static DataSource dataSource;
-	private static Map<String, List<String>> columnName;
+	private static Map<String, Set<String>> columnName = new HashMap<String, Set<String>>();
 
-	static
-	{
-		columnName = new HashMap<String, List<String>>();
-	}
-
-	static public List<String> getColumnNameList(String tableName) throws Exception {
+	public static Set<String> getColumnNameList(String tableName) throws Exception {
 		return columnName.get(tableName);
 	}
 
-	static public void addTableColumns(String tableName) throws Exception {
+	public static DataSource getDataSource() {
+		return dataSource;
+	}
+
+	public static void addTableColumns(String tableName) throws Exception {
 		ResultSetMetaData actorMetadata = getMetadata(tableName);
 		int columnCount = actorMetadata.getColumnCount();
-		List<String> tmpColumns = new ArrayList<>();
+		Set<String> tmpColumns = new HashSet<>();
 		for (int i = 0; i < columnCount; i++) {
 			tmpColumns.add(actorMetadata.getColumnLabel(i + 1));
 		}
@@ -45,10 +44,9 @@ public class JdbcHelper {
 		return actorMetadata;
 	}
 
-	public static DataSource getDataSource() throws Exception {
+	public static void initDataSource(String context) throws Exception {
 		Context initContext = new InitialContext();
 		Context envContext = (Context) initContext.lookup("java:/comp/env");
-		dataSource = (DataSource) envContext.lookup("jdbc/Sakila");
-		return dataSource;
+		dataSource = (DataSource) envContext.lookup(context);
 	}
 }

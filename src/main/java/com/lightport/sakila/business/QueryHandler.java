@@ -6,7 +6,9 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -28,7 +30,7 @@ public class QueryHandler {
 	private PreparedStatement countPrepStatement;
 	private List<FilterInfo> filters;
 	private Connection connection;
-	private List<String> columns;
+	private Set<String> columns;
 
 	public QueryHandler(Map<String, String> map, Connection connection, String tableName, List<FilterInfo> filters)
 			throws Exception {
@@ -86,6 +88,9 @@ public class QueryHandler {
 				selectBuilder.append(String.format("ORDER BY %s ASC ", sortColumn));
 			}
 		}
+ else if (sortColumn != null && !sortColumn.isEmpty()) {
+			throw new IllegalArgumentException();
+		}
 	}
 
 	private void addWhereToBuilder(StringBuilder builder) {
@@ -95,21 +100,9 @@ public class QueryHandler {
 		for (FilterInfo info : filters) {
 			list.add(String.format(" %s %s ? ", info.getColumn(), info.getComparsion()));
 		}
-		String join = stringJoin(list, " AND ");
+		String join = StringUtils.join(list, " AND ");
 		whereString.append(join);
 		builder.append(whereString.toString());
-	}
-
-	private String stringJoin(List<String> list, String append) {
-		StringBuilder builder = new StringBuilder();
-		for (int i = 0; i < list.size(); i++) {
-			if (i < list.size() - 1){
-				builder.append(String.format("%s %s", list.get(i), append));
-			} else {
-				builder.append(String.format("%s", list.get(i)));
-			}
-		}
-		return builder.toString();
 	}
 
 	public ResultSet getSelectResultSet() throws Exception {

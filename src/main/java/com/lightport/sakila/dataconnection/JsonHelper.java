@@ -5,38 +5,37 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.json.JSONObject;
 
 public class JsonHelper {
 	
-	JSONObject jsonObject;
-
-	public JSONObject getJsonObject(ResultSet resultSet) throws Exception {
-		initJsonObject(resultSet);
-		return this.jsonObject;
+	public static JSONObject getJsonObject(ResultSet resultSet) throws Exception {
+		JSONObject mapFormresultSet = mapFormresultSet(resultSet);
+		return mapFormresultSet;
 	}
 
-	private void initJsonObject(ResultSet resultSet) throws Exception {
-
-		jsonObject = new JSONObject();
+	private static JSONObject mapFormresultSet(ResultSet resultSet) throws Exception {
+		JSONObject jsonObject = new JSONObject();
 		ResultSetMetaData metaData = resultSet.getMetaData();
 		int columnCount = metaData.getColumnCount();
-		ArrayList<HashMap<String, Object>> list = new ArrayList<>();
+		ArrayList<Map<String, Object>> list = new ArrayList<>();
 
 		while (resultSet.next()) {
-			HashMap<String, Object> map = mapFromResultSet(columnCount, metaData, resultSet);
+			Map<String, Object> map = mapFromResultSet(columnCount, metaData, resultSet);
 			list.add(map);
 		}
 		jsonObject.put("items", list);
+		return jsonObject;
 	}
 	
-	public void setJsonItemCount(int items, JSONObject jsonObject) {
+	public static void setJsonItemCount(int items, JSONObject jsonObject) {
 		jsonObject.put("total", items);
 		System.out.println(jsonObject);
 	}
 
-	private HashMap<String, Object> mapFromResultSet(int columnCount, ResultSetMetaData metaData, ResultSet resultSet)
+	private static Map<String, Object> mapFromResultSet(int columnCount, ResultSetMetaData metaData, ResultSet resultSet)
 			throws SQLException {
 		HashMap<String, Object> map = new HashMap<>();
 		for (int i = 1; i <= columnCount; i++) {
