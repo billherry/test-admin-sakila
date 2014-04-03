@@ -1,6 +1,4 @@
-Ext.onReady(function() {
-
-	var pageSize = 10;
+function createStore() {
 	var store = new Ext.data.JsonStore({
 		autoDestroy : true,
 		remoteSort: true,
@@ -21,12 +19,8 @@ Ext.onReady(function() {
 			type : 'date',
 			dateformat : 'c'
 		} ]		
-	});	
-	
-	
-	var grid = CreateGrid(store, pageSize);	
-	grid.getBottomToolbar().doRefresh();
-	grid.render('array_grid');
+	});
 	window.store = store;
-	window.grid = grid;
-});
+	return store;	
+	
+};

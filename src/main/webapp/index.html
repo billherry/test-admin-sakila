@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Extjs grid</title>
+    
 <link rel="stylesheet" type="text/css"	href="http://dev.sencha.com/deploy/ext-3.4.0/examples/ux/gridfilters/css/GridFilters.css" />
 <link rel="stylesheet" type="text/css"	href="http://dev.sencha.com/deploy/ext-3.4.0/examples/ux/gridfilters/css/RangeMenu.css" />
 <link rel="stylesheet" type="text/css"	href="http://ext.load.hu/ext-3.4.1.1/examples/grid/grid-examples.css">
@@ -26,10 +27,16 @@
 <script type="text/javascript" src="store.js"></script>
 <script type="text/javascript" src="grid.js"></script>
 <script type="text/javascript" src="filter.js"></script>
+<script type="text/javascript" src="viewport.js"></script>
 
-
+<script type="text/javascript">
+	Ext.onReady(function(){
+		strore = createStore();
+		grid = createGrid(store,10);
+		viewPort = createViewPort(grid);
+	});
+</script>
 </head>
 <body>
-	<div id="array_grid"></div>
 </body>
 </html>
