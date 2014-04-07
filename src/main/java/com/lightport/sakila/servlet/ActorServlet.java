@@ -3,6 +3,8 @@ package com.lightport.sakila.servlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,6 +42,7 @@ public class ActorServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		JSONObject jsonObject = new JSONObject();
+		String out = "";
 		try {
 			DataSource dataSource = JdbcHelper.getDataSource();
 			Connection connection = dataSource.getConnection();
@@ -50,28 +53,43 @@ public class ActorServlet extends HttpServlet {
 
 			ActorHandler actorHandler = new ActorHandler(parametersMap, filters, connection);
 			jsonObject = actorHandler.getJsonObject();
-			writeResponse(jsonObject.toString(), response.getWriter());
+			out = jsonObject.toString();
 
 		} catch (Exception e) {
 			Log log = LogFactory.getLog(Class.class);
-			log.error("DatabaseError" + e.getMessage());
-			writeResponse(jsonObject.toString(), response.getWriter());
+			log.error("Error occurred: ", e);
+			writeException(response, e);
 		}
+		writeResponse(out, response);
 	}
 
-	private void writeResponse(String out, PrintWriter writer) {
-		try{
+	private void writeException(HttpServletResponse response, Exception e) {
+		response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+		Map<String, Object> map = new HashMap<>();
+		map.put("exception: ", e.getMessage());
+		map.put("class: ", e.getClass().getCanonicalName());
+		
+		List<String> stackList = new ArrayList<>();
+		e.getStackTrace();
+		for (StackTraceElement stackLine : e.getStackTrace()) {
+			stackList.add(String.format(" %s: %s (%s)", stackLine.getClassName(), stackLine.getMethodName(),
+					stackLine.getLineNumber()));
+		}
+		map.put("stack", stackList);
+
+		writeResponse(JSONObject.valueToString(map), response);
+	}
+
+	private void writeResponse(String out, HttpServletResponse response) {
+		try {
+			PrintWriter writer = response.getWriter();
 			writer.println(out);
 			writer.flush();
 			writer.close();
 		} catch (Exception e) {
-			writeException(writer, e, out);
+			Log log = LogFactory.getLog(Class.class);
+			log.error("Response stream failure. ", e);
 		}
-	}
-
-	private void writeException(PrintWriter writer, Exception e, String jsonString) {
-		String responseString = String.format("%s %s", e.getMessage(),jsonString);
-		writeResponse("Connection Problem: " + responseString, writer);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,

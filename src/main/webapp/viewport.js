@@ -1,43 +1,26 @@
 function createViewPort(grid) {
+	var editform2 = createForm("12","","","");
+	
+	var item1 =new Ext.Panel({
+		title : 'First',	
+	});
+	
+	var item2 =new Ext.Panel({
+		title : 'Second',	
+	});
 
 	var accordion = new Ext.Panel({
 		region : 'west',
 		split : true,
 		width : 210,
 		title : 'Actions',
+		layout:'accordion',
+		items : [item1, item2]
 	});
-	var editform = new Ext.form.FormPanel({
-		title : 'Edit Form',
-		id : 'editform',
-		region : 'east',
-		split : true,
-		width : 210,
-		items : [ {
-			xtype : 'numberfield',
-			name : 'id',
-			fieldLabel : 'Id '
-		}, {
-			xtype : 'textfield',
-			name : 'firstname',
-			fieldLabel : 'First Name'
-		}, {
-			xtype : 'textfield',
-			name : 'lastname',
-			fieldLabel : 'Last Name'
-		}, {
-			xtype : 'datefield',
-			name : 'lastupdate',
-			fieldLabel : 'Last update'
-		},
-		{
-			xtype : 'button',
-			text: 'Modify'
-		}]
-	});
-
+	
 	var viewport = new Ext.Viewport({
 		layout : 'border',
-		items : [ accordion, grid, editform ]
+		items : [ accordion, grid,editform2 ]
 	});
 	window.viewport = viewport;
 	return viewport;

@@ -1,6 +1,11 @@
 function createGrid(store, pageSize) {	
 	var filter = CreateFilter();
+	var editform = createForm("","","","");
 	var grid = new Ext.grid.GridPanel({
+		
+		getValue : function (){
+			return editform;
+		},
 		region:'center',
 		store : store,
 		colModel : new Ext.grid.ColumnModel({
@@ -32,6 +37,7 @@ function createGrid(store, pageSize) {
 					tooltip : 'Edit',
 					handler : function(grid, rowIndex, colIndex) {
 						var rec = store.getAt(rowIndex);
+						editform = createForm(rec.get('actor_id'),rec.get('first_name'),rec.get('last_name'),rec.get('last_update')) ;
 						alert(rec.get('last_name'));
 					}
 				},{
@@ -51,15 +57,13 @@ function createGrid(store, pageSize) {
 			pageSize : pageSize,
 			prependButtons : true
 		}),
-		sm : new Ext.grid.RowSelectionModel({
-			singleSelect : true
-		}),
 		width : 350,
 		height : 300,
 		frame : false,
 		title : 'Actors form sakila'
 	});
 	window.grid = grid;
+	window.editForm = editform;
 	grid.getBottomToolbar().doRefresh();
 	return grid;
 }
