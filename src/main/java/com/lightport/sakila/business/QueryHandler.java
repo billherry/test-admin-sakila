@@ -84,18 +84,17 @@ public class QueryHandler {
 		if (columns.contains(this.sortColumn)) {
 			if (sortDirection.equals("DESC")) {
 				selectBuilder.append(String.format("ORDER BY %s %s ", sortColumn, sortDirection));
-			} else {
+			} else if (sortDirection.equals("ASC")) {
 				selectBuilder.append(String.format("ORDER BY %s ASC ", sortColumn));
-			}
-		}
- else if (sortColumn != null && !sortColumn.isEmpty()) {
+			} else if (sortColumn != null && !sortColumn.isEmpty()) {
 			throw new IllegalArgumentException("Wrong query:" + selectBuilder.toString());
+			}
 		}
 	}
 
 	private void addWhereToBuilder(StringBuilder builder) {
 		StringBuilder whereString = new StringBuilder();
-		whereString.append("WHERE ");
+		whereString.append(" WHERE ");
 		List<String> list = new ArrayList<>();
 		for (FilterInfo info : filters) {
 			list.add(String.format(" %s %s ? ", info.getColumn(), info.getComparsion()));
