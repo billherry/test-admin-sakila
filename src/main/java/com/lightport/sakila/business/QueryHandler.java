@@ -87,7 +87,7 @@ public class QueryHandler {
 			} else if (sortDirection.equals("ASC")) {
 				selectBuilder.append(String.format("ORDER BY %s ASC ", sortColumn));
 			} else if (sortColumn != null && !sortColumn.isEmpty()) {
-				throw new IllegalArgumentException("Wrong query diraction:" + sortColumn);
+				throw new IllegalArgumentException("Wrong query direction:" + sortColumn);
 			}
 		}
 	}
