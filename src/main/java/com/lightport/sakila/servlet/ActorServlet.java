@@ -14,10 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
-import org.apache.catalina.connector.Response;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.lightport.sakila.dataconnection.ActorHandler;
@@ -41,6 +39,7 @@ public class ActorServlet extends HttpServlet {
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		JSONObject jsonObject = new JSONObject();
 		try {
 			DataSource dataSource = JdbcHelper.getDataSource();
 			Connection connection = dataSource.getConnection();
@@ -50,17 +49,13 @@ public class ActorServlet extends HttpServlet {
 			List<FilterInfo> filters = actorRequestContext.getFilters();
 
 			ActorHandler actorHandler = new ActorHandler(parametersMap, filters, connection);
-			JSONObject jsonObject = actorHandler.getJsonObject();
+			jsonObject = actorHandler.getJsonObject();
 			writeResponse(jsonObject.toString(), response.getWriter());
 
-		} catch (JSONException e) {
-			Log log = LogFactory.getLog(Class.class);
-			log.error("JsonParseError" + e.getMessage());
-			writeException(response.getWriter(), e);
 		} catch (Exception e) {
 			Log log = LogFactory.getLog(Class.class);
 			log.error("DatabaseError" + e.getMessage());
-			writeException(response.getWriter(), e);
+			writeResponse(jsonObject.toString(), response.getWriter());
 		}
 	}
 
@@ -70,12 +65,13 @@ public class ActorServlet extends HttpServlet {
 			writer.flush();
 			writer.close();
 		} catch (Exception e) {
-			writeException(writer, e);
+			writeException(writer, e, out);
 		}
 	}
 
-	private void writeException(PrintWriter writer, Exception e) {
-		writer.println(String.format("%s Error:%s", Response.SC_INTERNAL_SERVER_ERROR, e.getMessage()));
+	private void writeException(PrintWriter writer, Exception e, String jsonString) {
+		String responseString = String.format("%s %s", e.getMessage(),jsonString);
+		writeResponse("Connection Problem: " + responseString, writer);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,
