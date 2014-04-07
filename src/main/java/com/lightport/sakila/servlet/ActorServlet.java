@@ -65,9 +65,14 @@ public class ActorServlet extends HttpServlet {
 
 	private void writeException(HttpServletResponse response, Exception e) {
 		response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+		Map<String, Object> map = setExceptionMap(e);
+		writeResponse(JSONObject.valueToString(map), response);
+	}
+
+	private Map<String, Object> setExceptionMap(Exception e) {
 		Map<String, Object> map = new HashMap<>();
-		map.put("exception: ", e.getMessage());
-		map.put("class: ", e.getClass().getCanonicalName());
+		map.put("exception", e.getMessage());
+		map.put("class", e.getClass().getCanonicalName());
 		
 		List<String> stackList = new ArrayList<>();
 		e.getStackTrace();
@@ -76,8 +81,7 @@ public class ActorServlet extends HttpServlet {
 					stackLine.getLineNumber()));
 		}
 		map.put("stack", stackList);
-
-		writeResponse(JSONObject.valueToString(map), response);
+		return map;
 	}
 
 	private void writeResponse(String out, HttpServletResponse response) {
