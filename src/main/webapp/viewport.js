@@ -11,11 +11,6 @@ function createViewPort(grid) {
 		cls : 'empty',
 		items : [ button ]
 	});
-	var item2 = new Ext.Panel({
-		title : 'Accordion Item',
-		html : '&lt;empty panel&gt;',
-		cls : 'empty'
-	});
 
 	var accordion = new Ext.Panel({
 		region : 'west',
@@ -23,7 +18,7 @@ function createViewPort(grid) {
 		split : true,
 		width : 210,
 		layout : 'accordion',
-		items : [ item, item2 ]
+		items : [ item]
 	});
 
 	var viewport = new Ext.Viewport({
@@ -33,17 +28,8 @@ function createViewPort(grid) {
 			margins : '5 5 5 5',
 			cls : 'empty',
 			bodyStyle : 'background:#f1f1f1',
-		}, {
-			title : 'Sakila',
-			region : 'center',
-			id : 'gridArea',
-			cmargins : '0 0 0 0',
-			collapsible : false,
-			autoScroll : true,
-			xtype : 'panel',
-			margins : '5 5 5 5',
 			items : grid
-		} ]
+		}]
 	});
 	window.viewport = viewport;
 	return viewport;

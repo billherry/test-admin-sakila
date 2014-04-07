@@ -32,7 +32,7 @@ public class ActorServlet extends HttpServlet {
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 		try {
-			String initParameter = config.getServletContext().getInitParameter("SakilaContextParam");
+			String initParameter = config.getServletContext().getInitParameter("datasource");
 			JdbcHelper.initDataSource(initParameter);
 			JdbcHelper.addTableColumns("actor");
 		} catch (Exception e) {

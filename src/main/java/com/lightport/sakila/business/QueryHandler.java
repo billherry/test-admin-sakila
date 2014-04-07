@@ -89,7 +89,8 @@ public class QueryHandler {
 			}
 		}
  else if (sortColumn != null && !sortColumn.isEmpty()) {
-			throw new IllegalArgumentException();
+			IllegalArgumentException exception = new IllegalArgumentException();
+			throw exception;
 		}
 	}
 
