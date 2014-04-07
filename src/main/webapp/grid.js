@@ -2,7 +2,7 @@ function createGrid(store, pageSize) {
 	var filter = CreateFilter();
 	var grid = new Ext.grid.GridPanel({
 		region:'center',
-		store : store,		
+		store : store,
 		colModel : new Ext.grid.ColumnModel({
 			defaults : {
 				width : 100,
@@ -25,6 +25,23 @@ function createGrid(store, pageSize) {
 				dataIndex : 'last_update',
 				xtype : 'datecolumn',
 				format : 'Y.M.d'
+			},{
+				xtype : 'actioncolumn',
+				items : [{
+					icon : 'images/modify.png',
+					tooltip : 'Edit',
+					handler : function(grid, rowIndex, colIndex) {
+						var rec = store.getAt(rowIndex);
+						alert(rec.get('last_name'));
+					}
+				},{
+					icon : 'images/cross.png',
+					tooltip : 'Delete',
+					handler : function(grid, rowIndex, colIndex) {
+						var rec = store.getAt(rowIndex);
+						alert(rec.get('first_name'));
+					}
+				}]
 			}]
 		}),
 		plugins: [filter],
