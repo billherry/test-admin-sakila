@@ -5,7 +5,7 @@
 	id="WebApp_ID" version="3.0">
 	<context-param>
 		<description>Sakila context</description>
-		<param-name>SakilaContextParam</param-name>
+		<param-name>datasource</param-name>
 		<param-value>jdbc/Sakila</param-value>
 	</context-param>
 
