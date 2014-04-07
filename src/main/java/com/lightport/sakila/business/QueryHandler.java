@@ -89,8 +89,7 @@ public class QueryHandler {
 			}
 		}
  else if (sortColumn != null && !sortColumn.isEmpty()) {
-			IllegalArgumentException exception = new IllegalArgumentException();
-			throw exception;
+			throw new IllegalArgumentException("Wrong query:" + selectBuilder.toString());
 		}
 	}
 
