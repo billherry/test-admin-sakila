@@ -1,12 +1,6 @@
 function createGrid(store, pageSize) {	
-	var filter = CreateFilter();
-	var editform = createForm("","","","");
-	
+	var filter = createFilter();
 	var grid = new Ext.grid.GridPanel({
-		
-		getForm : function (){
-			return editform;
-		},
 		region:'center',
 		store : store,
 		colModel : new Ext.grid.ColumnModel({
@@ -38,16 +32,13 @@ function createGrid(store, pageSize) {
 					tooltip : 'Edit',
 					handler : function(grid, rowIndex, colIndex) {
 						var rec = store.getAt(rowIndex);
-						console.log(rec);
-						grid.getForm().load(rec);
-
+						Ext.getCmp('edit-form').getForm().loadRecord(rec);
 					}
 				},{
 					icon : 'images/cross.png',
 					tooltip : 'Delete',
 					handler : function(grid, rowIndex, colIndex) {
-						var rec = store.getAt(rowIndex);
-						alert(rec.get('first_name'));
+						//TODO delete record from database
 					}
 				}]
 			}]
@@ -65,7 +56,6 @@ function createGrid(store, pageSize) {
 		title : 'Actors form sakila'
 	});
 	window.grid = grid;
-	window.editForm = editform;
 	grid.getBottomToolbar().doRefresh();
 	return grid;
 }

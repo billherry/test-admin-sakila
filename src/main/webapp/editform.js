@@ -1,37 +1,39 @@
-function createForm(id, first_name, last_name, date) {
-	var editform = new Ext.form.FormPanel({
-		doAction : function (){},
-		title : 'Edit Form',
+function createForm(grid) {
+	var editform = new Ext.form.FormPanel({	
+		title : 'Edit Actors',
 		id : 'edit-form',
 		layout : 'form',
 		region : 'east',
 		split : true,
-		width : 210,
-		buttons : [{
+		width : 285,
+		buttons : [ {
 			xtype : 'button',
 			text : 'Modify'
 		}],
-		items : [ {
-			xtype : 'numberfield',
-			name : 'id',
-			fieldLabel : 'Id ',
-			value : id
-		}, {
-			xtype : 'textfield',
-			name : 'firstname',
-			fieldLabel : 'First Name',
-			value : first_name
-		}, {
-			xtype : 'textfield',
-			name : 'lastname',
-			fieldLabel : 'Last Name',
-			value : last_name
-		}, {
-			xtype : 'datefield',
-			name : 'lastupdate',
-			fieldLabel : 'Last update',
-			value : date
-		} ]
+		    items : [ {
+            layout: 'form',
+	    	items : [{
+	    		xtype:'fieldset',
+		        defaultType: 'textfield',
+		        items :[{
+		        		xtype : 'numberfield',
+		        		name: 'actor_id',
+		                fieldLabel: 'Id'
+		            }, {
+		                fieldLabel: 'FirstName',
+		                name : 'first_name'
+		                	
+		            }, {
+		                fieldLabel: 'LastName',
+		                name : 'last_name'
+		            },{
+		            	xtype : 'datefield',
+		            	fieldLabel : 'LastUpdate',
+		            	name : 'last_update'
+		            }
+		        ]
+		    },grid]
+	    	}]
 	});
 	return editform;
 }

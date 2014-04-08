@@ -1,4 +1,5 @@
 	function createViewPort(grid) {	
+		var editForm = createForm(grid);
 		var item1 = new Ext.Panel({
 			title : 'First',	
 		});
@@ -18,7 +19,7 @@
 		
 		var viewport = new Ext.Viewport({
 			layout : 'border',
-			items : [ accordion, grid,grid.getForm()]
+			items : [ accordion,grid,editForm]
 		});
 		window.viewport = viewport;
 		return viewport;

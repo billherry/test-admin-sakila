@@ -1,4 +1,4 @@
-function CreateFilter() {
+function createFilter() {
 	var filters = new Ext.ux.grid.GridFilters({
 		filters : [ {
 			type : 'numeric',
