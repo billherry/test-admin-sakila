@@ -2,6 +2,7 @@ function createGrid(store, pageSize) {
 	var filter = createFilter();
 	var grid = new Ext.grid.GridPanel({
 		region:'center',
+		plugins: [filter],
 		store : store,
 		colModel : new Ext.grid.ColumnModel({
 			defaults : {
@@ -43,12 +44,12 @@ function createGrid(store, pageSize) {
 				}]
 			}]
 		}),
-		plugins: [filter],
 		bbar : new Ext.PagingToolbar({
 			store : store,
 			displayInfo : true,
 			pageSize : pageSize,
-			prependButtons : true
+			prependButtons : true,
+			plugins: [filter],
 		}),
 		width : 350,
 		height : 300,
