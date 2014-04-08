@@ -1,5 +1,5 @@
 	function createViewPort(grid) {	
-		var editForm = createForm(grid);
+		var editForm = createForm();
 		var item1 = new Ext.Panel({
 			title : 'First',	
 		});

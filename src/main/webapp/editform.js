@@ -1,4 +1,4 @@
-function createForm(grid) {
+function createForm() {
 	var editform = new Ext.form.FormPanel({	
 		title : 'Edit Actors',
 		id : 'edit-form',
@@ -32,7 +32,7 @@ function createForm(grid) {
 		            	name : 'last_update'
 		            }
 		        ]
-		    },grid]
+		    }]
 	    	}]
 	});
 	return editform;
