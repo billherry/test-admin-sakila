@@ -1,10 +1,16 @@
-function createForm(id,first_name,last_name,date){
+function createForm(id, first_name, last_name, date) {
 	var editform = new Ext.form.FormPanel({
+		doAction : function (){},
 		title : 'Edit Form',
-		id : 'editform',
+		id : 'edit-form',
+		layout : 'form',
 		region : 'east',
 		split : true,
 		width : 210,
+		buttons : [{
+			xtype : 'button',
+			text : 'Modify'
+		}],
 		items : [ {
 			xtype : 'numberfield',
 			name : 'id',
@@ -25,11 +31,7 @@ function createForm(id,first_name,last_name,date){
 			name : 'lastupdate',
 			fieldLabel : 'Last update',
 			value : date
-		},
-		{
-			xtype : 'button',
-			text: 'Modify'
-		}]
-	});	
+		} ]
+	});
 	return editform;
 }

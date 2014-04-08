@@ -1,9 +1,10 @@
 function createGrid(store, pageSize) {	
 	var filter = CreateFilter();
 	var editform = createForm("","","","");
+	
 	var grid = new Ext.grid.GridPanel({
 		
-		getValue : function (){
+		getForm : function (){
 			return editform;
 		},
 		region:'center',
@@ -37,8 +38,9 @@ function createGrid(store, pageSize) {
 					tooltip : 'Edit',
 					handler : function(grid, rowIndex, colIndex) {
 						var rec = store.getAt(rowIndex);
-						editform = createForm(rec.get('actor_id'),rec.get('first_name'),rec.get('last_name'),rec.get('last_update')) ;
-						alert(rec.get('last_name'));
+						console.log(rec);
+						grid.getForm().load(rec);
+
 					}
 				},{
 					icon : 'images/cross.png',
