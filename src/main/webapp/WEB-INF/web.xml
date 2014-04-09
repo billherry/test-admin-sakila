@@ -20,7 +20,7 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>ActorServlet</servlet-name>
-		<url-pattern>/actors</url-pattern>
+		<url-pattern>/actors/*</url-pattern>
 	</servlet-mapping>
 
 	<resource-ref>

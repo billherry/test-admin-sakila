@@ -42,6 +42,7 @@ public class QueryHandler {
 		this.limit = map.get("limit");
 		this.sortColumn = map.get("sort");
 		this.sortDirection = map.get("dir");
+		log = LogFactory.getLog(Class.class);
 
 		initColumns();
 		buildQueryStart();
@@ -50,7 +51,6 @@ public class QueryHandler {
 
 	private void initColumns() throws Exception {
 		columns = JdbcHelper.getColumnNameList(tableName);
-		log = LogFactory.getLog(Class.class);
 		log.info(this.columns);
 	}
 
@@ -73,10 +73,14 @@ public class QueryHandler {
 	}
 
 	private void validLimitOffset() {
-		int limit = Integer.parseInt(this.limit);
-		int start = Integer.parseInt(this.start);
-		if (limit > 0 && start >= 0) {
-			selectBuilder.append(String.format("LIMIT %s , %s ", start, limit));
+		try {
+			int limit = Integer.parseInt(this.limit);
+			int start = Integer.parseInt(this.start);
+			if (limit > 0 && start >= 0) {
+				selectBuilder.append(String.format("LIMIT %s , %s ", start, limit));
+			}
+		} catch (Exception e) {
+			log.info("No pagination");
 		}
 	}
 

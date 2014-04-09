@@ -44,6 +44,9 @@ public class ActorServlet extends HttpServlet {
 		JSONObject jsonObject = new JSONObject();
 		String out = "";
 		try {
+			// query, select, insert, update, delete
+			String action = request.getPathInfo();
+
 			DataSource dataSource = JdbcHelper.getDataSource();
 			Connection connection = dataSource.getConnection();
 

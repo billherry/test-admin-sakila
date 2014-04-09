@@ -1,5 +1,4 @@
-function createStore() {
-	var store = new Ext.data.JsonStore({
+context.store = new Ext.data.JsonStore({
 		autoDestroy : true,
 		remoteSort: true,
 		totalProperty:'total',
@@ -9,7 +8,7 @@ function createStore() {
 		proxy : new Ext.data.HttpProxy({
 			method : 'GET',
 			type : 'ajax',
-			url : 'actors'
+			url : 'actors/query'
 		}),
 		fields : [ {
 			name : 'actor_id',
@@ -20,7 +19,3 @@ function createStore() {
 			dateformat : 'c'
 		} ]		
 	});
-	window.store = store;
-	return store;	
-	
-};
