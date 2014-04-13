@@ -1,4 +1,4 @@
-context.filter = new Ext.ux.grid.GridFilters({
+actorFilter = new Ext.ux.grid.GridFilters({
 			filters : [ {
 				type : 'numeric',
 				dataIndex : 'actor_id'

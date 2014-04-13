@@ -1,9 +1,5 @@
-context = {
-	buttonAction : {}
-};
-
 var item = new Ext.Panel({
-	title : 'Accordion Item 5',
+	title : 'Sakila Tables',
 	html : '&lt;empty panel&gt;',
 	cls : 'empty'
 });
@@ -18,8 +14,8 @@ var accordion = new Ext.Panel({
 });
 
 Ext.onReady(function() {
-	context.viewport = new Ext.Viewport({
+		viewport = new Ext.Viewport({
 		layout : 'border',
-		items : [ accordion, context.grid, context.editform ]
+		items : [ accordion, actorGrid, actorForm ]
 	});
 });

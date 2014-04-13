@@ -8,12 +8,10 @@
 		<param-name>datasource</param-name>
 		<param-value>jdbc/Sakila</param-value>
 	</context-param>
-
 	<display-name>test-admin-sakila</display-name>
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>
-
 	<servlet>
 		<servlet-name>ActorServlet</servlet-name>
 		<servlet-class>com.lightport.sakila.servlet.ActorServlet</servlet-class>
@@ -22,6 +20,8 @@
 		<servlet-name>ActorServlet</servlet-name>
 		<url-pattern>/actors/*</url-pattern>
 	</servlet-mapping>
+
+
 
 	<resource-ref>
 		<description>DB Connection</description>

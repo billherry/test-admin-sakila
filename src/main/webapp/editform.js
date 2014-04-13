@@ -1,8 +1,4 @@
-context.buttonAction.onSave = function(btn, ev) {
-	window.records = context.editform.getForm();
-};
-
-context.editform = new Ext.form.FormPanel({
+actorForm = new Ext.form.FormPanel({
 	title : 'Edit Actors',
 	id : 'edit-form',
 	layout : 'form',
@@ -10,10 +6,20 @@ context.editform = new Ext.form.FormPanel({
 	split : true,
 	width : 285,
 	record : null,
+	setRecord : function(rec) {
+		this.record = rec;
+		this.getForm().loadRecord(this.record);		
+	},
 	buttons : [ {
 		xtype : 'button',
 		text : 'Modify',
-		handler : context.buttonAction.onSave,
+		handler : function (){
+	        if (actorForm.getForm().isValid()) {
+	        	actorForm.getForm().updateRecord(actorForm.record);
+	        }
+			actorForm.getForm().reset();
+	        actorGrid.getBottomToolbar().doRefresh();
+		},
 		scope : this
 	} ],
 	items : [ {
@@ -35,7 +41,8 @@ context.editform = new Ext.form.FormPanel({
 			}, {
 				xtype : 'datefield',
 				fieldLabel : 'LastUpdate',
-				name : 'last_update'
+				name : 'last_update',
+				format : 'Y.M.d'
 			} ]
 		} ]
 	} ],

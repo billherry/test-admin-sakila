@@ -20,6 +20,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.JSONObject;
 
+import com.lightport.sakila.business.DeleteActor;
+import com.lightport.sakila.business.UpdateActor;
 import com.lightport.sakila.dataconnection.ActorHandler;
 import com.lightport.sakila.dataconnection.FilterInfo;
 import com.lightport.sakila.dataconnection.JdbcHelper;
@@ -44,11 +46,15 @@ public class ActorServlet extends HttpServlet {
 		JSONObject jsonObject = new JSONObject();
 		String out = "";
 		try {
-			// query, select, insert, update, delete
-			String action = request.getPathInfo();
-
 			DataSource dataSource = JdbcHelper.getDataSource();
 			Connection connection = dataSource.getConnection();
+			
+			// query, select, insert, update, delete
+			String action = request.getPathInfo();
+			if(action!=null && !action.isEmpty()){
+				runDmlQuery(action,connection,request);	
+			}
+			System.out.println();
 
 			ActorRequestContext actorRequestContext = new ActorRequestContext(request);
 			Map<String, String> parametersMap = actorRequestContext.getRequestParameters();
@@ -64,6 +70,16 @@ public class ActorServlet extends HttpServlet {
 			writeException(response, e);
 		}
 		writeResponse(out, response);
+	}
+
+	private void runDmlQuery(String action, Connection connection, HttpServletRequest request) throws Exception {
+		if(action.equals("/delete")){
+			int id = Integer.parseInt(request.getParameter("items"));
+			DeleteActor.Invoke(id, connection);
+		}else if (action.equals("/update")){
+			String[] parameterValues = request.getParameterMap().get("items");
+			UpdateActor.Invoke(connection,parameterValues);
+		}
 	}
 
 	private void writeException(HttpServletResponse response, Exception e) {
