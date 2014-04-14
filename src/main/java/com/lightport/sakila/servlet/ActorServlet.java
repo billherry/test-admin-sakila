@@ -76,8 +76,9 @@ public class ActorServlet extends HttpServlet {
 			int id = Integer.parseInt(request.getParameter("data"));
 			DeleteActor.Invoke(id, connection);
 		} else if (action.equals("update")) {
-			String[] parameterValues = request.getParameterMap().get("items");
-			UpdateActor.Invoke(connection, parameterValues);
+			JSONObject jsonParameters = new JSONObject(request.getParameter("data"));
+			System.out.println("JsonData: " + jsonParameters);
+			UpdateActor.Invoke(connection, request.getParameter("data"));
 		}
 	}
 

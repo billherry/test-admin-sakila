@@ -4,7 +4,7 @@ actorStore = new Ext.data.JsonStore({
 		totalProperty:'total',
 		storeId : 'myStore',
 		idProperty : 'actor_id',
-		root : 'items',
+		root : 'data',
         writer: {
             type: 'json',
             writeAllFields: false,

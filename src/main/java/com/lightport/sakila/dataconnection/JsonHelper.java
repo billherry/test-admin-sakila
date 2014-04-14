@@ -26,7 +26,7 @@ public class JsonHelper {
 			Map<String, Object> map = mapFromResultSet(columnCount, metaData, resultSet);
 			list.add(map);
 		}
-		jsonObject.put("items", list);
+		jsonObject.put("data", list);
 		return jsonObject;
 	}
 	
