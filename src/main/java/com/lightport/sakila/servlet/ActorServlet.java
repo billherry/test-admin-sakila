@@ -48,13 +48,12 @@ public class ActorServlet extends HttpServlet {
 		try {
 			DataSource dataSource = JdbcHelper.getDataSource();
 			Connection connection = dataSource.getConnection();
-			
+
 			// query, select, insert, update, delete
-			String action = request.getPathInfo();
-			if(action!=null && !action.isEmpty()){
-				runDmlQuery(action,connection,request);	
+			String action = request.getPathInfo().replace("/", "");
+			if (action != null && !action.isEmpty()) {
+				runDmlQuery(action, connection, request);
 			}
-			System.out.println();
 
 			ActorRequestContext actorRequestContext = new ActorRequestContext(request);
 			Map<String, String> parametersMap = actorRequestContext.getRequestParameters();
@@ -73,12 +72,12 @@ public class ActorServlet extends HttpServlet {
 	}
 
 	private void runDmlQuery(String action, Connection connection, HttpServletRequest request) throws Exception {
-		if(action.equals("/delete")){
-			int id = Integer.parseInt(request.getParameter("items"));
+		if (action.equals("delete")) {
+			int id = Integer.parseInt(request.getParameter("data"));
 			DeleteActor.Invoke(id, connection);
-		}else if (action.equals("/update")){
+		} else if (action.equals("update")) {
 			String[] parameterValues = request.getParameterMap().get("items");
-			UpdateActor.Invoke(connection,parameterValues);
+			UpdateActor.Invoke(connection, parameterValues);
 		}
 	}
 
@@ -92,7 +91,7 @@ public class ActorServlet extends HttpServlet {
 		Map<String, Object> map = new HashMap<>();
 		map.put("exception", e.getMessage());
 		map.put("class", e.getClass().getCanonicalName());
-		
+
 		List<String> stackList = new ArrayList<>();
 		e.getStackTrace();
 		for (StackTraceElement stackLine : e.getStackTrace()) {
